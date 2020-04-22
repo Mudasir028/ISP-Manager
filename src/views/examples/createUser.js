@@ -18,6 +18,7 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import { Franchises } from "../../services/fakeData";
 import { Packages } from "../../services/fakeData";
+import userPic from "assets/img/theme/team-4-800x800.jpg";
 
 class CreateUser extends form {
   state = {
@@ -57,13 +58,11 @@ class CreateUser extends form {
       date,
       franchise,
       package1,
-      // picUrl,
+      picUrl,
       gender,
       address,
       number,
     } = this.state.data;
-    console.log("gender");
-    console.log(gender);
 
     return (
       <>
@@ -80,7 +79,7 @@ class CreateUser extends form {
                         <img
                           alt="..."
                           className="rounded-circle"
-                          src={require("assets/img/theme/team-4-800x800.jpg")}
+                          src={picUrl ? picUrl : userPic}
                         />
                       </a>
                     </div>
@@ -196,7 +195,7 @@ class CreateUser extends form {
                         </Col>
                         <Col lg="6">
                           {this.renderImageInput(
-                            "pic",
+                            "picUrl",
                             "Pic (optional)",
                             "file",
                             "Yo, pick a Image!"

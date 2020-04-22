@@ -19,23 +19,23 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
+  // Badge,
   Card,
   CardHeader,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
+  // DropdownMenu,
+  // DropdownItem,
+  // UncontrolledDropdown,
+  // DropdownToggle,
+  // Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
+  // Progress,
   Table,
   Container,
   Row,
-  UncontrolledTooltip,
+  // UncontrolledTooltip,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";

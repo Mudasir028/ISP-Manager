@@ -57,9 +57,14 @@ class Form extends Component {
     else delete errors[input.name];
 
     const data = { ...this.state.data };
-    data[input.name] = input.value;
 
-    this.setState({ data, errors });
+    data[input.name] = input.value ? input.value : input.files[0];
+
+    this.setState({
+      data,
+      errors,
+    });
+    console.log(data);
   };
 
   renderButton(label, extraClasses = "") {

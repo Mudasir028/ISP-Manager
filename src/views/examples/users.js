@@ -19,29 +19,46 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
+  // Badge,s
   Card,
   CardHeader,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
+  // DropdownMenu,
+  // DropdownItem,
+  // UncontrolledDropdown,
+  // DropdownToggle,
+  // Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
+  // Progress,
   Table,
   Container,
   Row,
-  UncontrolledTooltip,
+  // UncontrolledTooltip,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
+import isp from "../../services/ispService";
 
 class Tables extends React.Component {
+  state = { allUsers: [] };
+
+  async componentDidMount() {
+    try {
+      const allUsers = await isp.getAllUsers();
+      this.setState({ allUsers });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        console.log(ex.response.data);
+      }
+    }
+  }
+
   render() {
+    const { allUsers } = this.state;
+    console.log("allUsers");
+    console.log(allUsers);
     return (
       <>
         <Header />

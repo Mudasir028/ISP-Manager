@@ -79,3 +79,33 @@ export const Packages = [
     creation_date: "15/03/2020",
   },
 ];
+export const Areas = [
+  {
+    id: "01",
+    name: "Area 1",
+    area: "Area 1",
+    creation_date: "15/03/2020",
+    description: "description",
+  },
+  {
+    id: "02",
+    name: "Area 2",
+    area: "Area 2",
+    creation_date: "15/03/2020",
+    description: "description",
+  },
+  {
+    id: "03",
+    name: "Area 3",
+    area: "Area 3",
+    creation_date: "15/03/2020",
+    description: "description",
+  },
+  {
+    id: "04",
+    name: "Area 4",
+    area: "Area 4",
+    creation_date: "15/03/2020",
+    description: "description",
+  },
+];
