@@ -20,34 +20,96 @@ import { Franchises } from "../../services/fakeData";
 import { Packages } from "../../services/fakeData";
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 
+import { toast } from "react-toastify";
+import isp from "../../services/ispService";
+
 class CreateUser extends form {
   state = {
     data: {
       name: "",
       cnic: "",
-      date: "",
+      number: "",
+      address: "",
       franchise: "",
+      gender: "",
+      date: "",
       status: false,
       package1: "",
       picUrl: "",
-      gender: "",
-      address: "",
-      number: "",
     },
     errors: {},
+    allPackages: [],
+    allFranchises: [],
   };
 
   schema = {
     name: Joi.string().required().label("Name"),
     cnic: Joi.string().required().label("CNIC"),
-    date: Joi.date().required().label("Joining Date"),
+    number: Joi.number().required().label("Number"),
+    address: Joi.string().required().label("Address"),
     franchise: Joi.string().required().label("Franchise"),
+    gender: Joi.string().required().label("Gender"),
+    date: Joi.date().required().label("Joining Date"),
     status: Joi.boolean().required().label("Status"),
     package1: Joi.string().required().label("Package"),
-    picUrl: Joi.string().label("PicUrl"),
-    gender: Joi.string().required().label("Gender"),
-    address: Joi.string().required().label("Address"),
-    number: Joi.number().required().label("Number"),
+    picUrl: Joi.string().allow("").label("PicUrl"),
+  };
+
+  async componentDidMount() {
+    try {
+      const Packages = isp.getAllPackages();
+      const Franchises = isp.getAllFranchises();
+      const [allPackages, allFranchises] = await Promise.all([
+        Packages,
+        Franchises,
+      ]);
+
+      this.setState({
+        allPackages: allPackages.packages,
+        allFranchises: allFranchises.franchises,
+      });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        console.log(ex.response.data);
+      }
+    }
+  }
+
+  doSubmit = async () => {
+    console.log("form validated");
+
+    try {
+      this.setState({ isSpinner: true });
+      const {
+        name,
+        cnic,
+        number: cell_num,
+        address,
+        franchise: franchise_id,
+        gender,
+      } = this.state.data;
+
+      await isp.createUser({
+        name,
+        cnic,
+        cell_num,
+        address,
+        franchise_id,
+        gender,
+      });
+    } catch (ex) {
+      console.log(ex);
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.name = ex.response.data;
+        this.setState({ errors });
+
+        toast.error(ex.response.data);
+      }
+    }
+    this.setState({
+      isSpinner: false,
+    });
   };
 
   render() {
@@ -63,6 +125,7 @@ class CreateUser extends form {
       address,
       number,
     } = this.state.data;
+    const { allFranchises, allPackages } = this.state;
 
     return (
       <>
@@ -70,7 +133,7 @@ class CreateUser extends form {
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-            <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+            {/* <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
               <Card className="card-profile shadow">
                 <Row className="justify-content-center">
                   <Col className="order-lg-2" lg="3">
@@ -129,28 +192,19 @@ class CreateUser extends form {
                   </div>
                 </CardBody>
               </Card>
-            </Col>
-            <Col className="order-xl-1" xl="8">
+            </Col> */}
+            {/* <Col className="order-xl-1" xl="8"> */}
+            <Col className="order-xl-1" xl="12">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col xs="8">
-                      <h3 className="mb-0">My account</h3>
-                    </Col>
-                    <Col className="text-right" xs="4">
-                      <Button
-                        color="primary"
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        size="sm"
-                      >
-                        Settings
-                      </Button>
+                      <h3 className="mb-0">Create User</h3>
                     </Col>
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  <Form>
+                  <Form onSubmit={this.handleSubmit}>
                     <h6 className="heading-small text-muted mb-4">
                       User information
                     </h6>
@@ -180,7 +234,7 @@ class CreateUser extends form {
                           {this.renderSelect(
                             "franchise",
                             "Franchise",
-                            Franchises
+                            allFranchises
                           )}
                         </Col>
 
@@ -191,7 +245,11 @@ class CreateUser extends form {
                           ])}
                         </Col>
                         <Col lg="6">
-                          {this.renderSelect("package1", "Package", Packages)}
+                          {this.renderSelect(
+                            "package1",
+                            "Package",
+                            allPackages
+                          )}
                         </Col>
                         <Col lg="6">
                           {this.renderImageInput(
@@ -236,6 +294,13 @@ class CreateUser extends form {
                         </Col>
                       </Row>
                     </div>
+                    <Row>
+                      <Col className="text-right" xs="12">
+                        <Button color="primary" size="lg" type="submit">
+                          Submit
+                        </Button>
+                      </Col>
+                    </Row>
                   </Form>
                 </CardBody>
               </Card>

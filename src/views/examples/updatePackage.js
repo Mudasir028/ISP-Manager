@@ -16,14 +16,13 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import { Franchises } from "../../services/fakeData";
 import { types } from "../../services/fakeData";
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 
 import { toast } from "react-toastify";
 import isp from "../../services/ispService";
 
-class CreatePackage extends form {
+class UpdatePackage extends form {
   state = {
     data: {
       name: "",
@@ -48,7 +47,11 @@ class CreatePackage extends form {
     charges: Joi.number().required().label("Charges"),
     franchise: Joi.string().required().label("Franchise"),
     data: Joi.string().required().label("Data Limit"),
-    picUrl: Joi.string().allow("").label("PicUrl"),
+    picUrl: Joi.any()
+      .meta({ swaggerType: "file" })
+      .optional()
+      .allow("")
+      .description("image file"),
     date: Joi.date().required().label("Joining Date"),
     status: Joi.boolean().required().label("Status"),
     description: Joi.string().required().label("Description"),
@@ -70,6 +73,7 @@ class CreatePackage extends form {
 
     try {
       this.setState({ isSpinner: true });
+      const id = this.props.match.params.package_id;
       const {
         name,
         type,
@@ -80,7 +84,7 @@ class CreatePackage extends form {
         description,
       } = this.state.data;
 
-      await isp.createPackage({
+      await isp.updatePackage({
         name,
         type,
         duration,
@@ -88,7 +92,10 @@ class CreatePackage extends form {
         franchise_id,
         data_limit,
         description,
+        id,
       });
+      const picUrl = document.querySelector("#picUrl");
+      await isp.updatePackagePic(picUrl.files[0], id);
     } catch (ex) {
       console.log(ex);
       if (ex.response && ex.response.status === 400) {
@@ -105,7 +112,6 @@ class CreatePackage extends form {
   };
 
   handleDuration = () => {
-    console.log("reached");
     const data = { ...this.state.data };
 
     if (data.type === "Monthly") {
@@ -322,4 +328,4 @@ class CreatePackage extends form {
   }
 }
 
-export default CreatePackage;
+export default UpdatePackage;

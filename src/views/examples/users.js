@@ -17,6 +17,8 @@
 */
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 // reactstrap components
 import {
   // Badge,s
@@ -40,6 +42,7 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
+import userPic from "assets/img/theme/team-4-800x800.jpg";
 
 class Tables extends React.Component {
   state = { allUsers: [] };
@@ -47,7 +50,7 @@ class Tables extends React.Component {
   async componentDidMount() {
     try {
       const allUsers = await isp.getAllUsers();
-      this.setState({ allUsers });
+      this.setState({ allUsers: allUsers.users });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -57,8 +60,7 @@ class Tables extends React.Component {
 
   render() {
     const { allUsers } = this.state;
-    console.log("allUsers");
-    console.log(allUsers);
+
     return (
       <>
         <Header />
@@ -69,148 +71,72 @@ class Tables extends React.Component {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">Card tables</h3>
+                  <h3 className="mb-0">All Users</h3>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
                       <th scope="col">Name</th>
                       <th scope="col">CNIC</th>
-                      <th scope="col">Pic (optional)</th>
-                      <th scope="col">Gender</th>
+                      <th scope="col">Number</th>
                       <th scope="col">Address</th>
                       <th scope="col">Franchise</th>
+                      <th scope="col">Gender</th>
+                      <th scope="col">Created At</th>
                       <th scope="col">Status</th>
                       <th scope="col">Current package</th>
+                      <th scope="col">Pic (optional)</th>
                       <th scope="col" />
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Ali Asgar</td>
-                      <td>34502-0350538-8</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
+                    {allUsers.map((u) => (
+                      <tr key={u.id}>
+                        <td>{u.name}</td>
+                        <td>{u.cnic}</td>
+                        <td>{u.cell_num}</td>
+                        <td>{u.address}</td>
+                        <td>{u.franchise_id}</td>
+                        <td>{u.gender}</td>
+                        <td>{u.created_at}</td>
+                        <td>{u.status === "1" ? "Active" : "Unactive"}</td>
+                        <td>{u.package_id}</td>
+
+                        <td>
+                          <div className="avatar-group">
+                            <a
+                              className="avatar avatar-sm"
+                              href="#pablo"
+                              id="tooltip742438047"
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <img
+                                alt="..."
+                                className="rounded-circle"
+                                src={u.pic || userPic}
+                              />
+                            </a>
+                          </div>
+                        </td>
+
+                        <td>
+                          <Link
+                            className="primary h5 mb-0 text-uppercase d-md"
+                            to={`/admin/view-user/${u.id}  `}
                           >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Male</td>
-                      <td>Bld Mihail Kogalniceanu</td>
-                      <td>Franchise1</td>
-                      <td>Status 1</td>
-                      <td>Current package 1</td>
-                    </tr>
-                    <tr>
-                      <td>Ali Asgar</td>
-                      <td>34502-0350538-8</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
+                            Veiw
+                          </Link>
+                        </td>
+                        {/* <td>
+                          <Link
+                            className="primary h5 mb-0 text-uppercase d-md"
+                            to={`/admin/update-user/${u.id}  `}
                           >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Male</td>
-                      <td>Bld Mihail Kogalniceanu</td>
-                      <td>Franchise1</td>
-                      <td>Status 1</td>
-                      <td>Current package 1</td>
-                    </tr>
-                    <tr>
-                      <td>Ali Asgar</td>
-                      <td>34502-0350538-8</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Male</td>
-                      <td>Bld Mihail Kogalniceanu</td>
-                      <td>Franchise1</td>
-                      <td>Status 1</td>
-                      <td>Current package 1</td>
-                    </tr>
-                    <tr>
-                      <td>Ali Asgar</td>
-                      <td>34502-0350538-8</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Male</td>
-                      <td>Bld Mihail Kogalniceanu</td>
-                      <td>Franchise1</td>
-                      <td>Status 1</td>
-                      <td>Current package 1</td>
-                    </tr>
-                    <tr>
-                      <td>Ali Asgar</td>
-                      <td>34502-0350538-8</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Male</td>
-                      <td>Bld Mihail Kogalniceanu</td>
-                      <td>Franchise1</td>
-                      <td>Status 1</td>
-                      <td>Current package 1</td>
-                    </tr>
+                            Edit
+                          </Link>
+                        </td> */}
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
                 <CardFooter className="py-4">

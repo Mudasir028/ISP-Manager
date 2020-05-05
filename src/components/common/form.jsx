@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
-import { FormGroup, Input, Label, CustomInput } from "reactstrap";
+import { FormGroup, Input, CustomInput } from "reactstrap";
 // import { toast } from "react-toastify";
 
 class Form extends Component {
@@ -64,7 +64,6 @@ class Form extends Component {
       data,
       errors,
     });
-    console.log(data);
   };
 
   renderButton(label, extraClasses = "") {
@@ -72,7 +71,7 @@ class Form extends Component {
     return <button className={classes}>{label}</button>;
   }
 
-  renderInput(name, label, type = "text", placeholder) {
+  renderInput(name, label, type = "text", placeholder, readOnly = false) {
     const { data, errors } = this.state;
 
     return (
@@ -88,7 +87,8 @@ class Form extends Component {
           placeholder={placeholder}
           className="form-control-alternative"
           onChange={this.handleChange}
-          error={errors[name]}
+          readOnly={readOnly}
+          // error={errors[name]}
           // defaultValue=""
         />
         {errors[name] && (
@@ -120,7 +120,7 @@ class Form extends Component {
       </FormGroup>
     );
   }
-  renderSelect(name, label, options) {
+  renderSelect(name, label, options, handleSelectChange) {
     const { data, errors } = this.state;
 
     return (
@@ -133,7 +133,10 @@ class Form extends Component {
           value={data[name]}
           type="select"
           className="form-control-alternative"
-          onChange={this.handleChange}
+          onChange={async (e) => {
+            await this.handleChange(e);
+            if (handleSelectChange) handleSelectChange();
+          }}
         >
           {options.map((option) => (
             <option key={option.id} value={option.id}>
@@ -148,8 +151,10 @@ class Form extends Component {
     );
   }
 
-  renderGenderInput(name, lable, type = "radio", placeholders) {
+  renderGenderInput(name, lable, type = "radio") {
     const { data, errors } = this.state;
+    console.log("genname");
+    console.log(name);
 
     return (
       <>
@@ -157,26 +162,31 @@ class Form extends Component {
           <label className="form-control-label" htmlFor={name}>
             {lable}
           </label>
-          <br />
-          <Label check>
-            <Input
-              type={type}
-              name={name}
-              value="Male"
-              onChange={this.handleChange}
-            />{" "}
-            Male
-          </Label>
-          <br />
-          <Label check>
-            <Input
-              type={type}
-              name={name}
-              value="Female"
-              onChange={this.handleChange}
-            />
-            Female
-          </Label>
+
+          <div className="radio">
+            <label>
+              <input
+                name={name}
+                type={type}
+                value="Male"
+                checked={data[name] === "Male"}
+                onChange={this.handleChange}
+              />
+              Male
+            </label>
+          </div>
+          <div className="radio">
+            <label>
+              <input
+                name={name}
+                type={type}
+                value="Female"
+                checked={data[name] === "Female"}
+                onChange={this.handleChange}
+              />
+              Female
+            </label>
+          </div>
           {errors[name] && (
             <div className="alert alert-danger">{errors[name]}</div>
           )}

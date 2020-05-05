@@ -25,6 +25,10 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
+import UpdateFranchise from "views/examples/updateFranchise";
+import UpdateUser from "views/examples/updateUser";
+import ViewUser from "views/examples/viewUser";
+import UpdatePackage from "views/examples/updatePackage";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
@@ -32,7 +36,7 @@ class Admin extends React.Component {
     document.scrollingElement.scrollTop = 0;
     this.refs.mainContent.scrollTop = 0;
   }
-  getRoutes = routes => {
+  getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
@@ -47,7 +51,7 @@ class Admin extends React.Component {
       }
     });
   };
-  getBrandText = path => {
+  getBrandText = (path) => {
     for (let i = 0; i < routes.length; i++) {
       if (
         this.props.location.pathname.indexOf(
@@ -68,7 +72,7 @@ class Admin extends React.Component {
           logo={{
             innerLink: "/admin/index",
             imgSrc: require("assets/img/brand/argon-react.png"),
-            imgAlt: "..."
+            imgAlt: "...",
           }}
         />
         <div className="main-content" ref="mainContent">
@@ -78,6 +82,16 @@ class Admin extends React.Component {
           />
           <Switch>
             {this.getRoutes(routes)}
+            <Route
+              path="/admin/update-franchise/:franchise_id"
+              component={UpdateFranchise}
+            />
+            <Route path="/admin/view-user/:user_id" component={ViewUser} />
+            <Route path="/admin/update-user/:user_id" component={UpdateUser} />
+            <Route
+              path="/admin/update-package/:package_id"
+              component={UpdatePackage}
+            />
             <Redirect from="*" to="/admin/index" />
           </Switch>
           <Container fluid>

@@ -16,6 +16,7 @@
 
 */
 import React from "react";
+import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -31,8 +32,22 @@ import {
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
+import isp from "../../services/ispService";
 
 class Franchise extends React.Component {
+  state = { allFranchises: [] };
+
+  async componentDidMount() {
+    try {
+      const allFranchises = await isp.getAllFranchises();
+      this.setState({ allFranchises: allFranchises.franchises });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        console.log(ex.response.data);
+      }
+    }
+  }
+
   render() {
     return (
       <>
@@ -44,7 +59,7 @@ class Franchise extends React.Component {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">Card tables</h3>
+                  <h3 className="mb-0">Franchises</h3>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
@@ -58,42 +73,22 @@ class Franchise extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Franchise 1</td>
-                      <td>12/05/2019</td>
-                      <td>Area 1</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Franchise 1</td>
-                      <td>12/05/2019</td>
-                      <td>Area 1</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Franchise 1</td>
-                      <td>12/05/2019</td>
-                      <td>Area 1</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Franchise 1</td>
-                      <td>12/05/2019</td>
-                      <td>Area 1</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Franchise 1</td>
-                      <td>12/05/2019</td>
-                      <td>Area 1</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Franchise 1</td>
-                      <td>12/05/2019</td>
-                      <td>Area 1</td>
-                      <td>Discription</td>
-                    </tr>
+                    {this.state.allFranchises.map((f) => (
+                      <tr key={f.id}>
+                        <td>{f.name}</td>
+                        <td>{f.date}</td>
+                        <td>{f.area}</td>
+                        <td>{f.details}</td>
+                        <td>
+                          <Link
+                            className="primary h4 mb-0 text-uppercase d-md"
+                            to={`/admin/update-franchise/${f.id}  `}
+                          >
+                            Edit
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
                 <CardFooter className="py-4">

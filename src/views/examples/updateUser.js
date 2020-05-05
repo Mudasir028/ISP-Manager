@@ -1,8 +1,9 @@
 import React from "react";
-// form validation
+
 import Joi from "joi-browser";
 
 import form from "../../components/common/form";
+
 // reactstrap components
 import {
   Button,
@@ -16,48 +17,76 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import { Franchises } from "../../services/fakeData";
-import { types } from "../../services/fakeData";
+
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 
 import { toast } from "react-toastify";
 import isp from "../../services/ispService";
 
-class CreatePackage extends form {
+class UpdateUser extends form {
   state = {
     data: {
       name: "",
-      type: "Monthly",
-      duration: 30,
-      charges: "",
+      cnic: "",
+      number: "",
+      address: "",
       franchise: "",
-      data: "",
-      picUrl: "",
+      gender: "",
+      date: new Date(),
       status: false,
-      date: "",
-      description: "",
+      package1: "",
+      picUrl: "",
     },
     errors: {},
+    allPackages: [],
     allFranchises: [],
   };
 
   schema = {
     name: Joi.string().required().label("Name"),
-    type: Joi.string().required().label("Type"),
-    duration: Joi.number().required().label("Duration"),
-    charges: Joi.number().required().label("Charges"),
+    cnic: Joi.string().required().label("CNIC"),
+    number: Joi.number().required().label("Number"),
+    address: Joi.string().required().label("Address"),
     franchise: Joi.string().required().label("Franchise"),
-    data: Joi.string().required().label("Data Limit"),
-    picUrl: Joi.string().allow("").label("PicUrl"),
+    gender: Joi.string().required().label("Gender"),
     date: Joi.date().required().label("Joining Date"),
     status: Joi.boolean().required().label("Status"),
-    description: Joi.string().required().label("Description"),
+    package1: Joi.string().required().label("Package"),
+    picUrl: Joi.string().allow("").label("PicUrl"),
   };
 
   async componentDidMount() {
     try {
-      const allFranchises = await isp.getAllFranchises();
-      this.setState({ allFranchises: allFranchises.franchises });
+      const id = this.props.match.params.user_id;
+      const getuser = isp.getUserDetails(id);
+      const Packages = isp.getAllPackages();
+      const Franchises = isp.getAllFranchises();
+      const [user, allPackages, allFranchises] = await Promise.all([
+        getuser,
+        Packages,
+        Franchises,
+      ]);
+      const userDetails = user.user[0];
+      const { data } = this.state;
+      data.name = userDetails.name;
+      data.cnic = userDetails.cnic;
+      data.number = userDetails.cell_num;
+      // data.franchise = userDetails.franchise;
+      data.address = userDetails.address;
+      data.gender = userDetails.gender;
+      data.date = userDetails.created_at;
+      data.status = userDetails.status;
+      // data.package1 = userDetails.package;
+
+      // data.picUrl = userDetails.pic;
+      console.log("franchise");
+      console.log(userDetails);
+
+      this.setState({
+        data,
+        allPackages: allPackages.packages,
+        allFranchises: allFranchises.franchises,
+      });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -70,24 +99,24 @@ class CreatePackage extends form {
 
     try {
       this.setState({ isSpinner: true });
+      const id = this.props.match.params.user_id;
       const {
         name,
-        type,
-        duration,
-        charges,
+        cnic,
+        number: cell_num,
+        address,
         franchise: franchise_id,
-        data: data_limit,
-        description,
+        gender,
       } = this.state.data;
 
-      await isp.createPackage({
+      await isp.updateUser({
         name,
-        type,
-        duration,
-        charges,
+        cnic,
+        cell_num,
+        address,
         franchise_id,
-        data_limit,
-        description,
+        gender,
+        id,
       });
     } catch (ex) {
       console.log(ex);
@@ -104,37 +133,22 @@ class CreatePackage extends form {
     });
   };
 
-  handleDuration = () => {
-    console.log("reached");
-    const data = { ...this.state.data };
-
-    if (data.type === "Monthly") {
-      data.duration = 30;
-    }
-    if (data.type === "Weekly") {
-      data.duration = 7;
-    }
-    if (data.type === "Daily") {
-      data.duration = 1;
-    }
-
-    this.setState({ data });
-  };
-
   render() {
     const {
       name,
-      // type,
-      duration,
-      charges,
+      cnic,
       status,
       date,
       franchise,
+      package1,
       picUrl,
-      data,
-      description,
+      gender,
+      address,
+      number,
     } = this.state.data;
-    const { allFranchises } = this.state;
+    const { allFranchises, allPackages } = this.state;
+    // console.log(status);
+    console.log(gender);
 
     return (
       <>
@@ -142,7 +156,7 @@ class CreatePackage extends form {
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-            <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+            {/* <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
               <Card className="card-profile shadow">
                 <Row className="justify-content-center">
                   <Col className="order-lg-2" lg="3">
@@ -184,7 +198,7 @@ class CreatePackage extends form {
                     <h3>{`Name: ${name}`}</h3>
                     <div className="h5 font-weight-300">
                       <i className="ni location_pin mr-2" />
-                      {`Duration: ${duration}`}
+                      {`CNIC: ${cnic}`}
                     </div>
                     <div className="h5 mt-4">
                       <i className="ni business_briefcase-24 mr-2" />
@@ -192,72 +206,53 @@ class CreatePackage extends form {
                     </div>
                     <p>{`Franchise: ${franchise}`}</p>
                     <hr className="my-4" />
-                    <p>Status: {status === "true" ? "Active" : "Inactive"}</p>
+                    <p>Status: {status === 1 ? "Active" : "Inactive"}</p>
+                    <p> {`Package: ${package1}`}</p>
+                    <p> {`Gender: ${gender}`}</p>
                     <hr className="my-4" />
-                    <p> {`Data: ${data}`}</p>
-                    <p> {`Charges: ${charges}`}</p>
-                    <p> {`Description : ${description}`}</p>
+                    <p> {`Address: ${address}`}</p>
+                    <p> {`Number: ${number}`}</p>
                   </div>
                 </CardBody>
               </Card>
-            </Col>
-            <Col className="order-xl-1" xl="8">
+            </Col> */}
+            {/* <Col className="order-xl-1" xl="8"> */}
+            <Col className="order-xl-1" xl="12">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col xs="8">
-                      <h3 className="mb-0">Create Package</h3>
+                      <h3 className="mb-0">Update User</h3>
                     </Col>
                   </Row>
                 </CardHeader>
                 <CardBody>
                   <Form onSubmit={this.handleSubmit}>
                     <h6 className="heading-small text-muted mb-4">
-                      Package information
+                      User information
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
                         <Col lg="6">
-                          {this.renderInput(
-                            "name",
-                            "Name",
-                            "text",
-                            "Package 1"
-                          )}
+                          {this.renderInput("name", "Name", "text", "Lucky")}
                         </Col>
-
                         <Col lg="6">
-                          {this.renderSelect(
-                            "type",
-                            "Type",
-                            types,
-                            this.handleDuration
+                          {this.renderInput(
+                            "cnic",
+                            "CNIC",
+                            "text",
+                            "34502-0350539-9"
                           )}
                         </Col>
 
                         <Col lg="6">
                           {this.renderInput(
-                            "duration",
-                            "Duration",
-                            "text",
-                            "30",
-                            true
+                            "date",
+                            "Joining Date",
+                            "date",
+                            "date placeholder"
                           )}
                         </Col>
-
-                        <Col lg="6">
-                          {this.renderInput("data", "Data", "text", "4Mb")}
-                        </Col>
-
-                        <Col lg="6">
-                          {this.renderInput(
-                            "charges",
-                            "Charges",
-                            "text",
-                            "2000"
-                          )}
-                        </Col>
-
                         <Col lg="6">
                           {this.renderSelect(
                             "franchise",
@@ -273,14 +268,12 @@ class CreatePackage extends form {
                           ])}
                         </Col>
                         <Col lg="6">
-                          {this.renderInput(
-                            "date",
-                            "Joining Date",
-                            "date",
-                            "date placeholder"
+                          {this.renderSelect(
+                            "package1",
+                            "Package",
+                            allPackages
                           )}
                         </Col>
-
                         <Col lg="6">
                           {this.renderImageInput(
                             "picUrl",
@@ -289,20 +282,40 @@ class CreatePackage extends form {
                             "Yo, pick a Image!"
                           )}
                         </Col>
+                        <Col lg="6">
+                          {this.renderGenderInput("gender", "Gender", "radio", [
+                            { id: "0", name: "Male" },
+                            { id: "1", name: "Female" },
+                          ])}
+                        </Col>
                       </Row>
                     </div>
                     <hr className="my-4" />
-                    {/* Details */}
+                    {/* Address */}
                     <h6 className="heading-small text-muted mb-4">
-                      Description Area
+                      Contact information
                     </h6>
                     <div className="pl-lg-4">
-                      {this.renderInput(
-                        "description",
-                        "Description",
-                        "textarea",
-                        "A few words about Package ..."
-                      )}
+                      <Row>
+                        <Col md="12">
+                          {this.renderInput(
+                            "address",
+                            "Address",
+                            "text",
+                            "Home Address"
+                          )}
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg="6">
+                          {this.renderInput(
+                            "number",
+                            "Number",
+                            "number",
+                            "+923032394255"
+                          )}
+                        </Col>
+                      </Row>
                     </div>
                     <Row>
                       <Col className="text-right" xs="12">
@@ -322,4 +335,4 @@ class CreatePackage extends form {
   }
 }
 
-export default CreatePackage;
+export default UpdateUser;

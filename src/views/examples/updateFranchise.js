@@ -21,7 +21,7 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { toast } from "react-toastify";
 import isp from "../../services/ispService";
 
-class CreateFranchise extends form {
+class UpdateFranchise extends form {
   state = {
     data: {
       name: "",
@@ -45,9 +45,9 @@ class CreateFranchise extends form {
 
     try {
       this.setState({ isSpinner: true });
-
+      const id = this.props.match.params.franchise_id;
       const { data } = this.state;
-      await isp.createFranchise(data.name, data.area, data.details);
+      await isp.updateFranchise(data.name, data.area, data.details, id);
     } catch (ex) {
       console.log(ex);
       if (ex.response && ex.response.status === 400) {
@@ -64,6 +64,8 @@ class CreateFranchise extends form {
   };
 
   render() {
+    // console.log("this.props.match.params");
+    // console.log(this.props.match.params.franchise_id);
     return (
       <>
         <UserHeader />
@@ -75,7 +77,7 @@ class CreateFranchise extends form {
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col xs="8">
-                      <h3 className="mb-0">Create Franchise</h3>
+                      <h3 className="mb-0">Update Franchise</h3>
                     </Col>
                   </Row>
                 </CardHeader>
@@ -124,7 +126,7 @@ class CreateFranchise extends form {
                         "details",
                         "Details",
                         "textarea",
-                        "A few words about Franchise ..."
+                        "A few words about Package ..."
                       )}
                     </div>
                     <Row>
@@ -145,4 +147,4 @@ class CreateFranchise extends form {
   }
 }
 
-export default CreateFranchise;
+export default UpdateFranchise;

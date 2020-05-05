@@ -17,6 +17,8 @@
 */
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 // reactstrap components
 import {
   // Badge,
@@ -40,8 +42,26 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 
+import isp from "../../services/ispService";
+import userPic from "assets/img/theme/team-4-800x800.jpg";
+
 class Packages extends React.Component {
+  state = { allPackages: [] };
+
+  async componentDidMount() {
+    try {
+      const allPackages = await isp.getAllPackages();
+      this.setState({ allPackages: allPackages.packages });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        console.log(ex.response.data);
+      }
+    }
+  }
+
   render() {
+    const { allPackages } = this.state;
+
     return (
       <>
         <Header />
@@ -58,148 +78,58 @@ class Packages extends React.Component {
                   <thead className="thead-light">
                     <tr>
                       <th scope="col">Name</th>
+                      <th scope="col">Type</th>
                       <th scope="col">Duration</th>
                       <th scope="col">Charges</th>
                       <th scope="col">Franchise</th>
-                      <th scope="col">Date</th>
-                      <th scope="col">Pic (optional)</th>
-                      <th scope="col">Status</th>
+                      <th scope="col">Data Limit</th>
                       <th scope="col">Creation Date</th>
+                      <th scope="col">Status</th>
                       <th scope="col">Discription</th>
+                      <th scope="col">Pic (optional)</th>
                       <th scope="col" />
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Package 1</td>
-                      <td>1 Month</td>
-                      <td>Rs 2000</td>
-                      <td>Franchise 1</td>
-                      <td>2Mb</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
+                    {allPackages.map((p) => (
+                      <tr key={p.id}>
+                        <td>{p.name}</td>
+                        <td>{p.type}</td>
+                        <td>{p.duration}</td>
+                        <td>{p.charges}</td>
+                        <td>{p.franchise_id}</td>
+                        <td>{p.data_limit}</td>
+                        <td>{p.created_at}</td>
+                        <td>{p.status}</td>
+                        <td>{p.description}</td>
+
+                        <td>
+                          <div className="avatar-group">
+                            <a
+                              className="avatar avatar-sm"
+                              href="#pablo"
+                              id="tooltip742438047"
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <img
+                                alt="..."
+                                className="rounded-circle"
+                                src={p.pic || userPic}
+                              />
+                            </a>
+                          </div>
+                        </td>
+
+                        <td>
+                          <Link
+                            className="primary h4 mb-0 text-uppercase d-md"
+                            to={`/admin/update-package/${p.id}`}
                           >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Status 1</td>
-                      <td>12/04/2020</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Package 1</td>
-                      <td>1 Month</td>
-                      <td>Rs 2000</td>
-                      <td>Franchise 1</td>
-                      <td>2Mb</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Status 1</td>
-                      <td>12/04/2020</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Package 1</td>
-                      <td>1 Month</td>
-                      <td>Rs 2000</td>
-                      <td>Franchise 1</td>
-                      <td>2Mb</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Status 1</td>
-                      <td>12/04/2020</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Package 1</td>
-                      <td>1 Month</td>
-                      <td>Rs 2000</td>
-                      <td>Franchise 1</td>
-                      <td>2Mb</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Status 1</td>
-                      <td>12/04/2020</td>
-                      <td>Discription</td>
-                    </tr>
-                    <tr>
-                      <td>Package 1</td>
-                      <td>1 Month</td>
-                      <td>Rs 2000</td>
-                      <td>Franchise 1</td>
-                      <td>2Mb</td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            className="avatar avatar-sm"
-                            href="#pablo"
-                            id="tooltip742438047"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-1-800x800.jpg")}
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>Status 1</td>
-                      <td>12/04/2020</td>
-                      <td>Discription</td>
-                    </tr>
+                            Edit
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
                 <CardFooter className="py-4">

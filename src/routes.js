@@ -107,6 +107,7 @@ var routes = [
     component: CreateFranchise,
     layout: "/admin",
   },
+
   {
     path: "/login",
     name: "Login",
