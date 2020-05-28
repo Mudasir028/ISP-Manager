@@ -59,8 +59,35 @@ class UpdatePackage extends form {
 
   async componentDidMount() {
     try {
-      const allFranchises = await isp.getAllFranchises();
-      this.setState({ allFranchises: allFranchises.franchises });
+      const id = this.props.match.params.package_id;
+      const getPackage = isp.getPackageDetails(id);
+
+      const Franchises = isp.getAllFranchises();
+      const [package1, allFranchises] = await Promise.all([
+        getPackage,
+        Franchises,
+      ]);
+
+      console.log(package1);
+
+      // const packageDetails = package1.package[0];
+
+      const { data } = this.state;
+      // data.name = packageDetails.name;
+      // data.cnic = packageDetails.cnic;
+      // data.number = packageDetails.cell_num;
+      // // data.franchise = packageDetails.franchise;
+      // data.address = packageDetails.address;
+      // data.gender = packageDetails.gender;
+      // data.date = packageDetails.created_at;
+      // data.status = packageDetails.status;
+
+      // data.picUrl = packageDetails.pic;
+
+      this.setState({
+        data,
+        allFranchises: allFranchises.franchises,
+      });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);

@@ -100,7 +100,7 @@ class Packages extends React.Component {
                         <td>{p.franchise_id}</td>
                         <td>{p.data_limit}</td>
                         <td>{p.created_at}</td>
-                        <td>{p.status}</td>
+                        <td>{p.status ? "Active" : "Unactive"}</td>
                         <td>{p.description}</td>
 
                         <td>

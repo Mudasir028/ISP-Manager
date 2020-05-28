@@ -16,24 +16,49 @@
 
 */
 import React from "react";
+import form from "../../components/common/form";
 
 // reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
-  Row,
-  Col
-} from "reactstrap";
+import { Button, Card, CardHeader, CardBody, Form, Row, Col } from "reactstrap";
 
-class Login extends React.Component {
+import { Redirect } from "react-router-dom";
+import Joi from "joi-browser";
+import auth from "../../services/authService";
+
+class Login extends form {
+  state = {
+    data: {
+      username: "",
+      password: "",
+    },
+    errors: {},
+  };
+
+  schema = {
+    username: Joi.string().required().label("Username"),
+    password: Joi.string().required().label("Password"),
+  };
+
+  doSubmit = async () => {
+    try {
+      const { data } = this.state;
+      await auth.login(data.username, data.password);
+
+      const { state } = this.props.location;
+      // window.location = state ? state.from.pathname : "/";
+
+      // window.location = state
+      //   ? state.from.pathname
+      //   : process.env.REACT_APP_BASENAME + "/";
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
+  };
+
   render() {
     return (
       <>
@@ -48,7 +73,7 @@ class Login extends React.Component {
                   className="btn-neutral btn-icon"
                   color="default"
                   href="#pablo"
-                  onClick={e => e.preventDefault()}
+                  onClick={(e) => e.preventDefault()}
                 >
                   <span className="btn-inner--icon">
                     <img
@@ -62,7 +87,7 @@ class Login extends React.Component {
                   className="btn-neutral btn-icon"
                   color="default"
                   href="#pablo"
-                  onClick={e => e.preventDefault()}
+                  onClick={(e) => e.preventDefault()}
                 >
                   <span className="btn-inner--icon">
                     <img
@@ -78,28 +103,21 @@ class Login extends React.Component {
               <div className="text-center text-muted mb-4">
                 <small>Or sign in with credentials</small>
               </div>
-              <Form role="form">
-                <FormGroup className="mb-3">
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-email-83" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Email" type="email" autoComplete="new-email"/>
-                  </InputGroup>
-                </FormGroup>
-                <FormGroup>
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-lock-circle-open" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Password" type="password" autoComplete="new-password"/>
-                  </InputGroup>
-                </FormGroup>
-                <div className="custom-control custom-control-alternative custom-checkbox">
+              <Form onSubmit={this.handleSubmit}>
+                {this.renderLoginInput(
+                  "username",
+                  "text",
+                  "Username",
+                  "ni ni-email-83"
+                )}
+                {this.renderLoginInput(
+                  "password",
+                  "password",
+                  "Password",
+                  "ni ni-lock-circle-open"
+                )}
+
+                {/* <div className="custom-control custom-control-alternative custom-checkbox">
                   <input
                     className="custom-control-input"
                     id=" customCheckLogin"
@@ -111,9 +129,9 @@ class Login extends React.Component {
                   >
                     <span className="text-muted">Remember me</span>
                   </label>
-                </div>
+                </div> */}
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="button">
+                  <Button className="my-4" color="primary" type="submit">
                     Sign in
                   </Button>
                 </div>
@@ -125,7 +143,7 @@ class Login extends React.Component {
               <a
                 className="text-light"
                 href="#pablo"
-                onClick={e => e.preventDefault()}
+                onClick={(e) => e.preventDefault()}
               >
                 <small>Forgot password?</small>
               </a>
@@ -134,7 +152,7 @@ class Login extends React.Component {
               <a
                 className="text-light"
                 href="#pablo"
-                onClick={e => e.preventDefault()}
+                onClick={(e) => e.preventDefault()}
               >
                 <small>Create new account</small>
               </a>

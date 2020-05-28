@@ -105,7 +105,6 @@ class CreatePackage extends form {
   };
 
   handleDuration = () => {
-    console.log("reached");
     const data = { ...this.state.data };
 
     if (data.type === "Monthly") {
@@ -142,7 +141,7 @@ class CreatePackage extends form {
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-            <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+            {/* <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
               <Card className="card-profile shadow">
                 <Row className="justify-content-center">
                   <Col className="order-lg-2" lg="3">
@@ -200,8 +199,9 @@ class CreatePackage extends form {
                   </div>
                 </CardBody>
               </Card>
-            </Col>
-            <Col className="order-xl-1" xl="8">
+            </Col> */}
+            {/* <Col className="order-xl-1" xl="8"> */}
+            <Col className="order-xl-1" xl="12">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">

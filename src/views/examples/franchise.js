@@ -82,11 +82,19 @@ class Franchise extends React.Component {
                         <td>
                           <Link
                             className="primary h4 mb-0 text-uppercase d-md"
+                            to={`/admin/view-franchise/${f.id}  `}
+                          >
+                            View
+                          </Link>
+                        </td>
+                        {/* <td>
+                          <Link
+                            className="primary h4 mb-0 text-uppercase d-md"
                             to={`/admin/update-franchise/${f.id}  `}
                           >
                             Edit
                           </Link>
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                   </tbody>

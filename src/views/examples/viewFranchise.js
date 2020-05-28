@@ -2,11 +2,12 @@ import React from "react";
 
 import Joi from "joi-browser";
 
+import { Link } from "react-router-dom";
+
 import form from "../../components/common/form";
 
 // reactstrap components
 import {
-  Button,
   Card,
   CardHeader,
   CardBody,
@@ -14,6 +15,7 @@ import {
   Container,
   Row,
   Col,
+  FormGroup,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
@@ -21,7 +23,7 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { toast } from "react-toastify";
 import isp from "../../services/ispService";
 
-class UpdateFranchise extends form {
+class ViewFranchise extends form {
   state = {
     data: {
       name: "",
@@ -45,7 +47,6 @@ class UpdateFranchise extends form {
       const id = this.props.match.params.franchise_id;
       const getfranchiseDetails = await isp.getFranchiseDetails(id);
       const franchiseDetails = getfranchiseDetails.franchises[0];
-
       const data = { ...this.state.data };
       data.name = franchiseDetails.name;
       data.area = franchiseDetails.area;
@@ -58,32 +59,9 @@ class UpdateFranchise extends form {
     }
   }
 
-  doSubmit = async () => {
-    console.log("form validated");
-
-    try {
-      this.setState({ isSpinner: true });
-      const id = this.props.match.params.franchise_id;
-      const { data } = this.state;
-      await isp.updateFranchise(data.name, data.area, data.details, id);
-    } catch (ex) {
-      console.log(ex);
-      if (ex.response && ex.response.status === 400) {
-        const errors = { ...this.state.errors };
-        errors.name = ex.response.data;
-        this.setState({ errors });
-
-        toast.error(ex.response.data);
-      }
-    }
-    this.setState({
-      isSpinner: false,
-    });
-  };
-
   render() {
-    // console.log("this.props.match.params");
-    // console.log(this.props.match.params.franchise_id);
+    const { name, date, area, details } = this.state.data;
+
     return (
       <>
         <UserHeader />
@@ -97,6 +75,14 @@ class UpdateFranchise extends form {
                     <Col xs="8">
                       <h3 className="mb-0">Update Franchise</h3>
                     </Col>
+                    <Col className="text-right" xs="4">
+                      <Link
+                        className="primary h4 mb-0 text-uppercase d-md"
+                        to={`/admin/update-franchise/${this.props.match.params.franchise_id}`}
+                      >
+                        Edit
+                      </Link>
+                    </Col>
                   </Row>
                 </CardHeader>
                 <CardBody>
@@ -107,30 +93,39 @@ class UpdateFranchise extends form {
                     <div className="pl-lg-4">
                       <Row>
                         <Col lg="6">
-                          {this.renderInput(
-                            "name",
-                            "Name",
-                            "text",
-                            "Franchise Name"
-                          )}
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor={name}
+                            >
+                              Name
+                            </label>
+                            <p>{name}</p>
+                          </FormGroup>
                         </Col>
 
                         <Col lg="6">
-                          {this.renderInput(
-                            "date",
-                            "Creation Date",
-                            "date",
-                            "date placeholder"
-                          )}
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor={date}
+                            >
+                              Date
+                            </label>
+                            <p>{date ? date : "------------"}</p>
+                          </FormGroup>
                         </Col>
 
                         <Col md="12">
-                          {this.renderInput(
-                            "area",
-                            "Area",
-                            "text",
-                            "Franchise Area"
-                          )}
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor={area}
+                            >
+                              Area
+                            </label>
+                            <p>{area}</p>
+                          </FormGroup>
                         </Col>
                       </Row>
                     </div>
@@ -140,20 +135,13 @@ class UpdateFranchise extends form {
                       About Area
                     </h6>
                     <div className="pl-lg-4">
-                      {this.renderInput(
-                        "details",
-                        "Details",
-                        "textarea",
-                        "A few words about Package ..."
-                      )}
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor={details}>
+                          Details
+                        </label>
+                        <p>{details}</p>
+                      </FormGroup>
                     </div>
-                    <Row>
-                      <Col className="text-right" xs="12">
-                        <Button color="primary" size="lg" type="submit">
-                          Submit
-                        </Button>
-                      </Col>
-                    </Row>
                   </Form>
                 </CardBody>
               </Card>
@@ -165,4 +153,4 @@ class UpdateFranchise extends form {
   }
 }
 
-export default UpdateFranchise;
+export default ViewFranchise;

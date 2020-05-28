@@ -25,10 +25,11 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
-import UpdateFranchise from "views/examples/updateFranchise";
-import UpdateUser from "views/examples/updateUser";
 import ViewUser from "views/examples/viewUser";
+import UpdateUser from "views/examples/updateUser";
 import UpdatePackage from "views/examples/updatePackage";
+import ViewFranchise from "views/examples/viewFranchise";
+import UpdateFranchise from "views/examples/updateFranchise";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
@@ -82,15 +83,19 @@ class Admin extends React.Component {
           />
           <Switch>
             {this.getRoutes(routes)}
-            <Route
-              path="/admin/update-franchise/:franchise_id"
-              component={UpdateFranchise}
-            />
             <Route path="/admin/view-user/:user_id" component={ViewUser} />
             <Route path="/admin/update-user/:user_id" component={UpdateUser} />
             <Route
               path="/admin/update-package/:package_id"
               component={UpdatePackage}
+            />
+            <Route
+              path="/admin/update-franchise/:franchise_id"
+              component={UpdateFranchise}
+            />
+            <Route
+              path="/admin/view-franchise/:franchise_id"
+              component={ViewFranchise}
             />
             <Redirect from="*" to="/admin/index" />
           </Switch>

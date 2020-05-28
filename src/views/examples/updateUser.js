@@ -79,8 +79,6 @@ class UpdateUser extends form {
       // data.package1 = userDetails.package;
 
       // data.picUrl = userDetails.pic;
-      console.log("franchise");
-      console.log(userDetails);
 
       this.setState({
         data,

@@ -16,8 +16,7 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import { Franchises } from "../../services/fakeData";
-import { Packages } from "../../services/fakeData";
+
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 
 import { toast } from "react-toastify";

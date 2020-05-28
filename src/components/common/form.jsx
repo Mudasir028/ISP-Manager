@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
-import { FormGroup, Input, CustomInput } from "reactstrap";
+import {
+  FormGroup,
+  Input,
+  CustomInput,
+  InputGroupAddon,
+  InputGroup,
+  InputGroupText,
+} from "reactstrap";
+
 // import { toast } from "react-toastify";
 
 class Form extends Component {
@@ -58,7 +66,8 @@ class Form extends Component {
 
     const data = { ...this.state.data };
 
-    data[input.name] = input.value ? input.value : input.files[0];
+    // data[input.name] = input.value ? input.value : input.files[0];
+    data[input.name] = input.value;
 
     this.setState({
       data,
@@ -91,6 +100,34 @@ class Form extends Component {
           // error={errors[name]}
           // defaultValue=""
         />
+        {errors[name] && (
+          <div className="alert alert-danger">{errors[name]}</div>
+        )}
+      </FormGroup>
+    );
+  }
+  renderLoginInput(name, type = "text", placeholder, fontawesom) {
+    const { data, errors } = this.state;
+
+    return (
+      <FormGroup className="mb-3">
+        <InputGroup className="input-group-alternative">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className={fontawesom} />
+            </InputGroupText>
+          </InputGroupAddon>
+          <Input
+            name={name}
+            id={name}
+            value={data[name]}
+            type={type}
+            autoComplete="new-email"
+            onChange={this.handleChange}
+            placeholder={placeholder}
+          />
+        </InputGroup>
+
         {errors[name] && (
           <div className="alert alert-danger">{errors[name]}</div>
         )}
