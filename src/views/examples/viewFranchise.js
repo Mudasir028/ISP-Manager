@@ -35,13 +35,6 @@ class ViewFranchise extends form {
     isSpinner: false,
   };
 
-  schema = {
-    name: Joi.string().required().label("Name"),
-    date: Joi.date().required().label("Joining Date"),
-    area: Joi.string().required().label("Area"),
-    details: Joi.string().required().label("Details"),
-  };
-
   async componentDidMount() {
     try {
       const id = this.props.match.params.franchise_id;

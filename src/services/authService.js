@@ -4,7 +4,7 @@ import http from "./httpService";
 
 const apiEndpoint = {
   login: "/check_login",
-  // logout: "/auth/logout",
+  logout: "/logout",
 };
 
 const tokenKey = "token";
@@ -24,12 +24,15 @@ export async function login(username, password) {
 }
 
 // export function loginWithJwt(jwt) {
-//   localStorage.setItem(tokenKey, jwt);
+//   localStorage.setItem(tokenKey, jwt);o
 // }
 
-// export function logout() {
-//   localStorage.removeItem(tokenKey);
-// }
+async function logout(username) {
+  try {
+    await http.post(apiEndpoint.logout, { username });
+  } catch (ex) {}
+  localStorage.removeItem(tokenKey);
+}
 
 export function getCurrentUser() {
   try {
@@ -48,7 +51,7 @@ export function getJwt() {
 export default {
   login,
   // loginWithJwt,
-  // logout,
+  logout,
   getCurrentUser,
   getJwt,
 };

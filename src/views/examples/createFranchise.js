@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import Toast from "light-toast";
 
 import { toast } from "react-toastify";
 import isp from "../../services/ispService";
@@ -25,7 +26,6 @@ class CreateFranchise extends form {
   state = {
     data: {
       name: "",
-      date: "",
       area: "",
       details: "",
     },
@@ -35,32 +35,31 @@ class CreateFranchise extends form {
 
   schema = {
     name: Joi.string().required().label("Name"),
-    date: Joi.date().required().label("Joining Date"),
     area: Joi.string().required().label("Area"),
     details: Joi.string().required().label("Details"),
   };
 
   doSubmit = async () => {
-    console.log("form validated");
-
+    // Toast.info(content, duration, onClose);
+    // Toast.success(content, duration, onClose);
+    // Toast.fail(content, duration, onClose);
+    // Toast.loading(content, onClose);
+    // Toast.hide();
     try {
-      this.setState({ isSpinner: true });
-
+      Toast.loading("Loading...");
       const { data } = this.state;
-      await isp.createFranchise(data.name, data.area, data.details);
+      const res = await isp.createFranchise(data.name, data.area, data.details);
+      Toast.hide();
+      Toast.success(res.msg[0].message, 3000);
     } catch (ex) {
-      console.log(ex);
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.name = ex.response.data;
         this.setState({ errors });
 
-        toast.error(ex.response.data);
+        Toast.fail(ex.response.data, 3000);
       }
     }
-    this.setState({
-      isSpinner: false,
-    });
   };
 
   render() {
@@ -82,7 +81,7 @@ class CreateFranchise extends form {
                 <CardBody>
                   <Form onSubmit={this.handleSubmit}>
                     <h6 className="heading-small text-muted mb-4">
-                      User information
+                      Franchise Information
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
@@ -97,15 +96,6 @@ class CreateFranchise extends form {
 
                         <Col lg="6">
                           {this.renderInput(
-                            "date",
-                            "Creation Date",
-                            "date",
-                            "date placeholder"
-                          )}
-                        </Col>
-
-                        <Col md="12">
-                          {this.renderInput(
                             "area",
                             "Area",
                             "text",
@@ -116,9 +106,7 @@ class CreateFranchise extends form {
                     </div>
                     <hr className="my-4" />
                     {/* Details */}
-                    <h6 className="heading-small text-muted mb-4">
-                      About Area
-                    </h6>
+                    <h6 className="heading-small text-muted mb-4">About</h6>
                     <div className="pl-lg-4">
                       {this.renderInput(
                         "details",

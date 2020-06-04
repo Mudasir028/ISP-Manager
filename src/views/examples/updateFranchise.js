@@ -25,7 +25,6 @@ class UpdateFranchise extends form {
   state = {
     data: {
       name: "",
-      date: "",
       area: "",
       details: "",
     },
@@ -35,7 +34,6 @@ class UpdateFranchise extends form {
 
   schema = {
     name: Joi.string().required().label("Name"),
-    date: Joi.date().required().label("Joining Date"),
     area: Joi.string().required().label("Area"),
     details: Joi.string().required().label("Details"),
   };
@@ -59,8 +57,6 @@ class UpdateFranchise extends form {
   }
 
   doSubmit = async () => {
-    console.log("form validated");
-
     try {
       this.setState({ isSpinner: true });
       const id = this.props.match.params.franchise_id;
@@ -82,8 +78,6 @@ class UpdateFranchise extends form {
   };
 
   render() {
-    // console.log("this.props.match.params");
-    // console.log(this.props.match.params.franchise_id);
     return (
       <>
         <UserHeader />
@@ -102,7 +96,7 @@ class UpdateFranchise extends form {
                 <CardBody>
                   <Form onSubmit={this.handleSubmit}>
                     <h6 className="heading-small text-muted mb-4">
-                      User information
+                      Franchise Information
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
@@ -117,15 +111,6 @@ class UpdateFranchise extends form {
 
                         <Col lg="6">
                           {this.renderInput(
-                            "date",
-                            "Creation Date",
-                            "date",
-                            "date placeholder"
-                          )}
-                        </Col>
-
-                        <Col md="12">
-                          {this.renderInput(
                             "area",
                             "Area",
                             "text",
@@ -136,15 +121,13 @@ class UpdateFranchise extends form {
                     </div>
                     <hr className="my-4" />
                     {/* Details */}
-                    <h6 className="heading-small text-muted mb-4">
-                      About Area
-                    </h6>
+                    <h6 className="heading-small text-muted mb-4">About</h6>
                     <div className="pl-lg-4">
                       {this.renderInput(
                         "details",
                         "Details",
                         "textarea",
-                        "A few words about Package ..."
+                        "A few words about Franchise ..."
                       )}
                     </div>
                     <Row>

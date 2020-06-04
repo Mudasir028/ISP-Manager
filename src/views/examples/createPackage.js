@@ -16,10 +16,7 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import { Franchises } from "../../services/fakeData";
 import { types } from "../../services/fakeData";
-import userPic from "assets/img/theme/team-4-800x800.jpg";
-
 import { toast } from "react-toastify";
 import isp from "../../services/ispService";
 
@@ -32,9 +29,6 @@ class CreatePackage extends form {
       charges: "",
       franchise: "",
       data: "",
-      picUrl: "",
-      status: false,
-      date: "",
       description: "",
     },
     errors: {},
@@ -48,16 +42,15 @@ class CreatePackage extends form {
     charges: Joi.number().required().label("Charges"),
     franchise: Joi.string().required().label("Franchise"),
     data: Joi.string().required().label("Data Limit"),
-    picUrl: Joi.string().allow("").label("PicUrl"),
-    date: Joi.date().required().label("Joining Date"),
-    status: Joi.boolean().required().label("Status"),
     description: Joi.string().required().label("Description"),
   };
 
   async componentDidMount() {
     try {
       const allFranchises = await isp.getAllFranchises();
-      this.setState({ allFranchises: allFranchises.franchises });
+      const data = { ...this.state.data };
+      data.franchise = allFranchises.franchises[0].id.toString();
+      this.setState({ data, allFranchises: allFranchises.franchises });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -121,18 +114,6 @@ class CreatePackage extends form {
   };
 
   render() {
-    const {
-      name,
-      // type,
-      duration,
-      charges,
-      status,
-      date,
-      franchise,
-      picUrl,
-      data,
-      description,
-    } = this.state.data;
     const { allFranchises } = this.state;
 
     return (
@@ -141,66 +122,6 @@ class CreatePackage extends form {
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-            {/* <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
-              <Card className="card-profile shadow">
-                <Row className="justify-content-center">
-                  <Col className="order-lg-2" lg="3">
-                    <div className="card-profile-image">
-                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                        <img
-                          alt="..."
-                          className="rounded-circle"
-                          src={picUrl ? picUrl : userPic}
-                        />
-                      </a>
-                    </div>
-                  </Col>
-                </Row>
-                <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                  <div className="d-flex justify-content-between">
-                    <Button
-                      className="mr-4"
-                      color="info"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Connect
-                    </Button>
-                    <Button
-                      className="float-right"
-                      color="default"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Message
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardBody className="pt-0 pt-md-4">
-                  <div className="text-center mt-5">
-                    <h3>{`Name: ${name}`}</h3>
-                    <div className="h5 font-weight-300">
-                      <i className="ni location_pin mr-2" />
-                      {`Duration: ${duration}`}
-                    </div>
-                    <div className="h5 mt-4">
-                      <i className="ni business_briefcase-24 mr-2" />
-                      {`Date: ${date}`}
-                    </div>
-                    <p>{`Franchise: ${franchise}`}</p>
-                    <hr className="my-4" />
-                    <p>Status: {status === "true" ? "Active" : "Inactive"}</p>
-                    <hr className="my-4" />
-                    <p> {`Data: ${data}`}</p>
-                    <p> {`Charges: ${charges}`}</p>
-                    <p> {`Description : ${description}`}</p>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col> */}
-            {/* <Col className="order-xl-1" xl="8"> */}
             <Col className="order-xl-1" xl="12">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
@@ -263,30 +184,6 @@ class CreatePackage extends form {
                             "franchise",
                             "Franchise",
                             allFranchises
-                          )}
-                        </Col>
-
-                        <Col lg="6">
-                          {this.renderSelect("status", "Status", [
-                            { id: false, name: "Inactive" },
-                            { id: true, name: "Active" },
-                          ])}
-                        </Col>
-                        <Col lg="6">
-                          {this.renderInput(
-                            "date",
-                            "Joining Date",
-                            "date",
-                            "date placeholder"
-                          )}
-                        </Col>
-
-                        <Col lg="6">
-                          {this.renderImageInput(
-                            "picUrl",
-                            "Pic (optional)",
-                            "file",
-                            "Yo, pick a Image!"
                           )}
                         </Col>
                       </Row>

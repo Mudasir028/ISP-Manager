@@ -1,17 +1,17 @@
 import React from "react";
-
+// form validation
 import { Link } from "react-router-dom";
 
 import form from "../../components/common/form";
 // reactstrap components
 import {
-  FormGroup,
   Card,
   CardHeader,
   CardBody,
   Container,
   Row,
   Col,
+  FormGroup,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
@@ -20,21 +20,40 @@ import userPic from "assets/img/theme/team-4-800x800.jpg";
 import { toast } from "react-toastify";
 import isp from "../../services/ispService";
 
-class ViewUser extends form {
+class ViewPackage extends form {
   state = {
-    userDetails: {},
+    data: {
+      name: "",
+      type: "Monthly",
+      duration: 30,
+      charges: "",
+      franchise: "",
+      data: "",
+      picUrl: "",
+      status: false,
+      date: "",
+      description: "",
+    },
+    errors: {},
+    allFranchises: [],
   };
 
   async componentDidMount() {
     try {
-      const id = this.props.match.params.user_id;
-      const user = await isp.getUserDetails(id);
-
-      const userDetails = user.user[0];
-
-      this.setState({
-        userDetails,
-      });
+      const id = this.props.match.params.package_id;
+      const package1 = await isp.getPackageDetails(id);
+      const packageDetails = package1.Packages[0];
+      const data = { ...this.state.data };
+      data.name = packageDetails.name;
+      data.type = packageDetails.type;
+      data.duration = packageDetails.duration;
+      data.charges = packageDetails.charges;
+      data.franchise = packageDetails.franchise_id;
+      data.data = packageDetails.data_limit;
+      data.picUrl = packageDetails.pic;
+      data.date = packageDetails.created_at;
+      data.description = packageDetails.description;
+      this.setState({ data });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -45,16 +64,15 @@ class ViewUser extends form {
   render() {
     const {
       name,
-      cnic,
-      status,
-      created_at,
+      type,
+      duration,
+      charges,
+      date,
       franchise,
-      package: package1,
-      pic,
-      gender,
-      address,
-      cell_num,
-    } = this.state.userDetails;
+      picUrl,
+      data,
+      description,
+    } = this.state.data;
 
     return (
       <>
@@ -71,7 +89,7 @@ class ViewUser extends form {
                         <img
                           alt="..."
                           className="rounded-circle"
-                          src={pic || userPic}
+                          src={picUrl || userPic}
                         />
                       </a>
                     </div>
@@ -80,14 +98,14 @@ class ViewUser extends form {
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col xs="8">
-                      <h3 className="mb-0">View User</h3>
+                      <h3 className="mb-0">View Package</h3>
                     </Col>
 
                     <Col className="text-right" xs="4">
                       <Link
                         className="primary h5 mb-0 text-uppercase d-md"
                         // to={`/admin/update-user/${u.id}  `}
-                        to={`/admin/update-user/${this.props.match.params.user_id}  `}
+                        to={`/admin/update-package/${this.props.match.params.package_id}  `}
                       >
                         Edit
                       </Link>
@@ -96,7 +114,7 @@ class ViewUser extends form {
                 </CardHeader>
                 <CardBody>
                   <h6 className="heading-small text-muted mb-4">
-                    User information
+                    Package information
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
@@ -108,23 +126,43 @@ class ViewUser extends form {
                           <p>{name}</p>
                         </FormGroup>
                       </Col>
+
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor={name}>
-                            Cnic
+                            Type
                           </label>
-                          <p>{cnic}</p>
+                          <p>{type}</p>
                         </FormGroup>
                       </Col>
 
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor={name}>
-                            Joining Date
+                            Duration
                           </label>
-                          <p>{created_at}</p>
+                          <p>{duration}</p>
                         </FormGroup>
                       </Col>
+
+                      <Col lg="6">
+                        <FormGroup>
+                          <label className="form-control-label" htmlFor={name}>
+                            Data Limit
+                          </label>
+                          <p>{data}</p>
+                        </FormGroup>
+                      </Col>
+
+                      <Col lg="6">
+                        <FormGroup>
+                          <label className="form-control-label" htmlFor={name}>
+                            Charges
+                          </label>
+                          <p>{charges}</p>
+                        </FormGroup>
+                      </Col>
+
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor={name}>
@@ -135,57 +173,29 @@ class ViewUser extends form {
                       </Col>
 
                       <Col lg="6">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor={name}>
-                            Status
-                          </label>
-                          <p>{status === "1" ? "Active" : "Unactive"}</p>
-                        </FormGroup>
+                        <label className="form-control-label" htmlFor={name}>
+                          Status
+                        </label>
+                        {/* <p>{status}</p> */}
                       </Col>
                       <Col lg="6">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor={name}>
-                            Package
-                          </label>
-                          <p>{package1}</p>
-                        </FormGroup>
-                      </Col>
-
-                      <Col lg="6">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor={name}>
-                            Gender
-                          </label>
-                          <p>{gender}</p>
-                        </FormGroup>
+                        <label className="form-control-label" htmlFor={name}>
+                          Date
+                        </label>
+                        <p>{date}</p>
                       </Col>
                     </Row>
                   </div>
                   <hr className="my-4" />
-                  {/* Address */}
+                  {/* Details */}
                   <h6 className="heading-small text-muted mb-4">
-                    Contact information
+                    Description Area
                   </h6>
                   <div className="pl-lg-4">
-                    <Row>
-                      <Col md="6">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor={name}>
-                            Address
-                          </label>
-                          <p>{address}</p>
-                        </FormGroup>
-                      </Col>
-
-                      <Col md="6">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor={name}>
-                            Number
-                          </label>
-                          <p>{cell_num}</p>
-                        </FormGroup>
-                      </Col>
-                    </Row>
+                    <label className="form-control-label" htmlFor={name}>
+                      Description
+                    </label>
+                    <p>{description}</p>
                   </div>
                 </CardBody>
               </Card>
@@ -197,4 +207,4 @@ class ViewUser extends form {
   }
 }
 
-export default ViewUser;
+export default ViewPackage;

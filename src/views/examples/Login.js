@@ -47,9 +47,9 @@ class Login extends form {
       const { state } = this.props.location;
       // window.location = state ? state.from.pathname : "/";
 
-      // window.location = state
-      //   ? state.from.pathname
-      //   : process.env.REACT_APP_BASENAME + "/";
+      window.location = state
+        ? state.from.pathname
+        : process.env.REACT_APP_BASENAME + "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };

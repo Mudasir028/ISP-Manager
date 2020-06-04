@@ -1,24 +1,7 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import Index from "views/Index.js";
 // import Profile from "views/examples/Profile.js";
 // import Maps from "views/examples/Maps.js";
-import Register from "views/examples/Register.js";
+// import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 // import Tables from "views/examples/Tables.js";
 // import Icons from "views/examples/Icons.js";
@@ -28,6 +11,10 @@ import Franchise from "views/examples/franchise";
 import CreateUser from "views/examples/createUser";
 import CreatePackage from "views/examples/createPackage";
 import CreateFranchise from "views/examples/createFranchise";
+import UserBills from "views/examples/userBills";
+import Subscriptions from "views/examples/subscriptions";
+import PaidBills from "views/examples/paidBills";
+import SubscribePackage from "views/examples/subscribePackage";
 
 var routes = [
   {
@@ -75,14 +62,14 @@ var routes = [
   {
     path: "/packages",
     name: "Packages",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-planet text-red",
     component: Packages,
     layout: "/admin",
   },
   {
     path: "/franchise",
     name: "Franchise",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-app",
     component: Franchise,
     layout: "/admin",
   },
@@ -107,20 +94,48 @@ var routes = [
     component: CreateFranchise,
     layout: "/admin",
   },
+  {
+    path: "/subscribe-package",
+    name: "Subscribe Package",
+    icon: "ni ni-delivery-fast text-purple",
+    component: SubscribePackage,
+    layout: "/admin",
+  },
+  {
+    path: "/subscriptions",
+    name: "Subscriptions",
+    icon: "ni ni-spaceship text-vilet",
+    component: Subscriptions,
+    layout: "/admin",
+  },
+  {
+    path: "/user-bills",
+    name: "Unpaid Bills ",
+    icon: "ni ni-money-coins text-red",
+    component: UserBills,
+    layout: "/admin",
+  },
+  {
+    path: "/paid-bills",
+    name: "Paid Bills ",
+    icon: "ni ni-money-coins text-green",
+    component: PaidBills,
+    layout: "/admin",
+  },
 
   {
     path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
+    // name: "Login",
+    // icon: "ni ni-key-25 text-info",
     component: Login,
     layout: "/auth",
   },
-  {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: Register,
-    layout: "/auth",
-  },
+  // {
+  //   path: "/register",
+  //   name: "Register",
+  //   icon: "ni ni-circle-08 text-pink",
+  //   component: Register,
+  //   layout: "/auth",
+  // },
 ];
 export default routes;

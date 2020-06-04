@@ -49,7 +49,7 @@ class UpdateUser extends form {
     address: Joi.string().required().label("Address"),
     franchise: Joi.string().required().label("Franchise"),
     gender: Joi.string().required().label("Gender"),
-    date: Joi.date().required().label("Joining Date"),
+    date: Joi.date().allow("").label("Joining Date"),
     status: Joi.boolean().required().label("Status"),
     package1: Joi.string().required().label("Package"),
     picUrl: Joi.string().allow("").label("PicUrl"),
@@ -75,7 +75,8 @@ class UpdateUser extends form {
       data.address = userDetails.address;
       data.gender = userDetails.gender;
       data.date = userDetails.created_at;
-      data.status = userDetails.status;
+      data.status = Boolean(JSON.parse(userDetails.status.toLowerCase()));
+      // data.status = Boolean.parse();
       // data.package1 = userDetails.package;
 
       // data.picUrl = userDetails.pic;
@@ -105,6 +106,8 @@ class UpdateUser extends form {
         address,
         franchise: franchise_id,
         gender,
+        date,
+        package1,
       } = this.state.data;
 
       await isp.updateUser({
@@ -114,7 +117,12 @@ class UpdateUser extends form {
         address,
         franchise_id,
         gender,
+        created_at: date,
         id,
+      });
+      await isp.createSubscription({
+        user_id: id,
+        package_id: package1,
       });
     } catch (ex) {
       console.log(ex);
@@ -145,8 +153,6 @@ class UpdateUser extends form {
       number,
     } = this.state.data;
     const { allFranchises, allPackages } = this.state;
-    // console.log(status);
-    console.log(gender);
 
     return (
       <>

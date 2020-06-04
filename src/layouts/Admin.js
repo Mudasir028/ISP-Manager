@@ -30,6 +30,9 @@ import UpdateUser from "views/examples/updateUser";
 import UpdatePackage from "views/examples/updatePackage";
 import ViewFranchise from "views/examples/viewFranchise";
 import UpdateFranchise from "views/examples/updateFranchise";
+import ViewPackage from "views/examples/viewPackage";
+import SingleUserBills from "views/examples/singleUserBills";
+import Logout from "views/examples/logout";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
@@ -62,7 +65,7 @@ class Admin extends React.Component {
         return routes[i].name;
       }
     }
-    return "Brand";
+    return "";
   };
   render() {
     return (
@@ -83,19 +86,28 @@ class Admin extends React.Component {
           />
           <Switch>
             {this.getRoutes(routes)}
+            <Route path="/admin/logout" component={Logout} />
             <Route path="/admin/view-user/:user_id" component={ViewUser} />
             <Route path="/admin/update-user/:user_id" component={UpdateUser} />
+            <Route
+              path="/admin/single-user-bills/:user_id"
+              component={SingleUserBills}
+            />
+            <Route
+              path="/admin/view-package/:package_id"
+              component={ViewPackage}
+            />
             <Route
               path="/admin/update-package/:package_id"
               component={UpdatePackage}
             />
             <Route
-              path="/admin/update-franchise/:franchise_id"
-              component={UpdateFranchise}
-            />
-            <Route
               path="/admin/view-franchise/:franchise_id"
               component={ViewFranchise}
+            />
+            <Route
+              path="/admin/update-franchise/:franchise_id"
+              component={UpdateFranchise}
             />
             <Redirect from="*" to="/admin/index" />
           </Switch>

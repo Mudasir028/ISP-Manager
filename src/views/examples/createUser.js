@@ -31,13 +31,8 @@ class CreateUser extends form {
       address: "",
       franchise: "",
       gender: "",
-      date: "",
-      status: false,
-      package1: "",
-      picUrl: "",
     },
     errors: {},
-    allPackages: [],
     allFranchises: [],
   };
 
@@ -48,23 +43,17 @@ class CreateUser extends form {
     address: Joi.string().required().label("Address"),
     franchise: Joi.string().required().label("Franchise"),
     gender: Joi.string().required().label("Gender"),
-    date: Joi.date().required().label("Joining Date"),
-    status: Joi.boolean().required().label("Status"),
-    package1: Joi.string().required().label("Package"),
-    picUrl: Joi.string().allow("").label("PicUrl"),
   };
 
   async componentDidMount() {
     try {
-      const Packages = isp.getAllPackages();
-      const Franchises = isp.getAllFranchises();
-      const [allPackages, allFranchises] = await Promise.all([
-        Packages,
-        Franchises,
-      ]);
+      const allFranchises = await isp.getAllFranchises();
+
+      const data = { ...this.state.data };
+      data.franchise = allFranchises.franchises[0].id.toString();
 
       this.setState({
-        allPackages: allPackages.packages,
+        data,
         allFranchises: allFranchises.franchises,
       });
     } catch (ex) {
@@ -75,8 +64,6 @@ class CreateUser extends form {
   }
 
   doSubmit = async () => {
-    console.log("form validated");
-
     try {
       this.setState({ isSpinner: true });
       const {
@@ -124,7 +111,7 @@ class CreateUser extends form {
       address,
       number,
     } = this.state.data;
-    const { allFranchises, allPackages } = this.state;
+    const { allFranchises } = this.state;
 
     return (
       <>
@@ -222,14 +209,6 @@ class CreateUser extends form {
                         </Col>
 
                         <Col lg="6">
-                          {this.renderInput(
-                            "date",
-                            "Joining Date",
-                            "date",
-                            "date placeholder"
-                          )}
-                        </Col>
-                        <Col lg="6">
                           {this.renderSelect(
                             "franchise",
                             "Franchise",
@@ -237,27 +216,6 @@ class CreateUser extends form {
                           )}
                         </Col>
 
-                        <Col lg="6">
-                          {this.renderSelect("status", "Status", [
-                            { id: false, name: "Inactive" },
-                            { id: true, name: "Active" },
-                          ])}
-                        </Col>
-                        <Col lg="6">
-                          {this.renderSelect(
-                            "package1",
-                            "Package",
-                            allPackages
-                          )}
-                        </Col>
-                        <Col lg="6">
-                          {this.renderImageInput(
-                            "picUrl",
-                            "Pic (optional)",
-                            "file",
-                            "Yo, pick a Image!"
-                          )}
-                        </Col>
                         <Col lg="6">
                           {this.renderGenderInput("gender", "Gender", "radio", [
                             { id: "0", name: "Male" },

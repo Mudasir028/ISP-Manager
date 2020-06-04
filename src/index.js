@@ -25,7 +25,6 @@ import "assets/scss/argon-dashboard-react.scss";
 
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
-import Login from "./views/examples/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -34,19 +33,21 @@ import auth from "./services/authService";
 const user = auth.getCurrentUser();
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename={process.env.REACT_APP_BASENAME}>
     <ToastContainer />
     <Switch>
       {user && (
         <>
           <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-          <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
           <Redirect from="/" to="/admin/index" />
         </>
       )}
-
-      {!user && <Route path="/login" component={Login} />}
-      {!user && <Redirect from="/admin/index" to="/login" />}
+      {!user && (
+        <>
+          <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+          <Redirect from="/" to="/auth/login" />
+        </>
+      )}
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

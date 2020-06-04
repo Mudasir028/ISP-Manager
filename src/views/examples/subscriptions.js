@@ -1,56 +1,28 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-
-import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
-  // Badge,s
   Card,
   CardHeader,
   CardFooter,
-  // DropdownMenu,
-  // DropdownItem,
-  // UncontrolledDropdown,
-  // DropdownToggle,
-  // Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  // Progress,
   Table,
   Container,
   Row,
-  // UncontrolledTooltip,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
-import userPic from "assets/img/theme/team-4-800x800.jpg";
 
-class Tables extends React.Component {
-  state = { allUsers: [] };
+class Subscriptions extends React.Component {
+  state = { subscriptions: [] };
 
   async componentDidMount() {
     try {
-      const allUsers = await isp.getAllUsers();
-      this.setState({ allUsers: allUsers.users });
+      const res = await isp.getSubscriptions();
+      this.setState({ subscriptions: res.subscriptions });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -59,7 +31,7 @@ class Tables extends React.Component {
   }
 
   render() {
-    const { allUsers } = this.state;
+    const { subscriptions } = this.state;
 
     return (
       <>
@@ -71,78 +43,35 @@ class Tables extends React.Component {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">All Users</h3>
+                  <h3 className="mb-0">Subscriptions</h3>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">CNIC</th>
-                      <th scope="col">Number</th>
-                      <th scope="col">Address</th>
-                      <th scope="col">Franchise</th>
-                      <th scope="col">Gender</th>
+                      <th scope="col">User Id</th>
                       <th scope="col">Created At</th>
+                      <th scope="col">End Date</th>
+                      <th scope="col">Last_paid</th>
+                      <th scope="col">Next Pay Date</th>
+                      <th scope="col">Package Id</th>
                       <th scope="col">Status</th>
-                      <th scope="col">Current package</th>
-                      <th scope="col">Pic (optional)</th>
+                      <th scope="col">Subscription Date</th>
+                      <th scope="col">Updated At</th>
                       <th scope="col" />
                     </tr>
                   </thead>
                   <tbody>
-                    {allUsers.map((u) => (
-                      <tr key={u.id}>
-                        <td>{u.name}</td>
-                        <td>{u.cnic}</td>
-                        <td>{u.cell_num}</td>
-                        <td>{u.address}</td>
-                        <td>{u.franchise_id}</td>
-                        <td>{u.gender}</td>
+                    {subscriptions.map((u) => (
+                      <tr key={u.user_id}>
+                        <td>{u.user_id}</td>
                         <td>{u.created_at}</td>
-                        <td>{u.status === "1" ? "Active" : "Unactive"}</td>
+                        <td>{u.end_date}</td>
+                        <td>{u.last_paid}</td>
+                        <td>{u.next_pay_date}</td>
                         <td>{u.package_id}</td>
-
-                        <td>
-                          <div className="avatar-group">
-                            <a
-                              className="avatar avatar-sm"
-                              href="#pablo"
-                              id="tooltip742438047"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <img
-                                alt="..."
-                                className="rounded-circle"
-                                src={u.pic || userPic}
-                              />
-                            </a>
-                          </div>
-                        </td>
-
-                        <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/single-user-bills/${u.id}  `}
-                          >
-                            User Bills
-                          </Link>
-                        </td>
-                        <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/view-user/${u.id}  `}
-                          >
-                            Veiw
-                          </Link>
-                        </td>
-                        {/* <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/update-user/${u.id}  `}
-                          >
-                            Edit
-                          </Link>
-                        </td> */}
+                        <td>{u.status === "1" ? "Active" : "Unactive"}</td>
+                        <td>{u.subscription_date}</td>
+                        <td>{u.updated_at}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -208,4 +137,4 @@ class Tables extends React.Component {
   }
 }
 
-export default Tables;
+export default Subscriptions;

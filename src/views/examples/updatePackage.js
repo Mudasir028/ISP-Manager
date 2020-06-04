@@ -17,7 +17,6 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { types } from "../../services/fakeData";
-import userPic from "assets/img/theme/team-4-800x800.jpg";
 
 import { toast } from "react-toastify";
 import isp from "../../services/ispService";
@@ -68,21 +67,17 @@ class UpdatePackage extends form {
         Franchises,
       ]);
 
-      console.log(package1);
-
-      // const packageDetails = package1.package[0];
-
-      const { data } = this.state;
-      // data.name = packageDetails.name;
-      // data.cnic = packageDetails.cnic;
-      // data.number = packageDetails.cell_num;
-      // // data.franchise = packageDetails.franchise;
-      // data.address = packageDetails.address;
-      // data.gender = packageDetails.gender;
-      // data.date = packageDetails.created_at;
-      // data.status = packageDetails.status;
-
-      // data.picUrl = packageDetails.pic;
+      const packageDetails = package1.Packages[0];
+      const data = { ...this.state.data };
+      data.name = packageDetails.name;
+      data.type = packageDetails.type;
+      data.duration = packageDetails.duration;
+      data.charges = packageDetails.charges;
+      data.franchise = packageDetails.franchise_id;
+      data.data = packageDetails.data_limit;
+      data.picUrl = packageDetails.pic;
+      data.date = packageDetails.created_at;
+      data.description = packageDetails.description;
 
       this.setState({
         data,
@@ -155,18 +150,6 @@ class UpdatePackage extends form {
   };
 
   render() {
-    const {
-      name,
-      // type,
-      duration,
-      charges,
-      status,
-      date,
-      franchise,
-      picUrl,
-      data,
-      description,
-    } = this.state.data;
     const { allFranchises } = this.state;
 
     return (
@@ -175,66 +158,7 @@ class UpdatePackage extends form {
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-            <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
-              <Card className="card-profile shadow">
-                <Row className="justify-content-center">
-                  <Col className="order-lg-2" lg="3">
-                    <div className="card-profile-image">
-                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                        <img
-                          alt="..."
-                          className="rounded-circle"
-                          src={picUrl ? picUrl : userPic}
-                        />
-                      </a>
-                    </div>
-                  </Col>
-                </Row>
-                <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                  <div className="d-flex justify-content-between">
-                    <Button
-                      className="mr-4"
-                      color="info"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Connect
-                    </Button>
-                    <Button
-                      className="float-right"
-                      color="default"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Message
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardBody className="pt-0 pt-md-4">
-                  <div className="text-center mt-5">
-                    <h3>{`Name: ${name}`}</h3>
-                    <div className="h5 font-weight-300">
-                      <i className="ni location_pin mr-2" />
-                      {`Duration: ${duration}`}
-                    </div>
-                    <div className="h5 mt-4">
-                      <i className="ni business_briefcase-24 mr-2" />
-                      {`Date: ${date}`}
-                    </div>
-                    <p>{`Franchise: ${franchise}`}</p>
-                    <hr className="my-4" />
-                    <p>Status: {status === "true" ? "Active" : "Inactive"}</p>
-                    <hr className="my-4" />
-                    <p> {`Data: ${data}`}</p>
-                    <p> {`Charges: ${charges}`}</p>
-                    <p> {`Description : ${description}`}</p>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col className="order-xl-1" xl="8">
+            <Col className="order-xl-1" xl="12">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">

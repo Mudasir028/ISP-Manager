@@ -1,14 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import auth from "../../services/authService";
 
-class Logout extends Component {
+class Logout extends React.Component {
   async componentDidMount() {
-    // const { state } = this.props.location;
+    const username = "ispmanager";
+    await auth.logout(username);
 
-    await auth.logout();
-
-    // window.location = state ? state.from.pathname : "/";
-    // window.location = "/";
     window.location = process.env.REACT_APP_BASENAME + "/";
   }
 

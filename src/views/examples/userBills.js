@@ -1,56 +1,29 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-
-import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
-  // Badge,s
   Card,
   CardHeader,
   CardFooter,
-  // DropdownMenu,
-  // DropdownItem,
-  // UncontrolledDropdown,
-  // DropdownToggle,
-  // Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  // Progress,
   Table,
   Container,
   Row,
-  // UncontrolledTooltip,
+  Button,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
-import userPic from "assets/img/theme/team-4-800x800.jpg";
 
-class Tables extends React.Component {
-  state = { allUsers: [] };
+class UserBills extends React.Component {
+  state = { allUserBills: [] };
 
   async componentDidMount() {
     try {
-      const allUsers = await isp.getAllUsers();
-      this.setState({ allUsers: allUsers.users });
+      const res = await isp.getAllUserbills();
+      this.setState({ allUserBills: res.bills });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -58,8 +31,23 @@ class Tables extends React.Component {
     }
   }
 
+  handleBills = async (user_id) => {
+    try {
+      await isp.payUserbill(user_id);
+      const originalAllUserBills = this.state.allUserBills;
+      const allUserBills = originalAllUserBills.filter(
+        (u) => u.user_id !== user_id
+      );
+      this.setState({ allUserBills });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        console.log(ex.response.data);
+      }
+    }
+  };
+
   render() {
-    const { allUsers } = this.state;
+    const { allUserBills } = this.state;
 
     return (
       <>
@@ -71,7 +59,7 @@ class Tables extends React.Component {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">All Users</h3>
+                  <h3 className="mb-0">Unpaid Bills</h3>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
@@ -79,70 +67,31 @@ class Tables extends React.Component {
                       <th scope="col">Name</th>
                       <th scope="col">CNIC</th>
                       <th scope="col">Number</th>
-                      <th scope="col">Address</th>
-                      <th scope="col">Franchise</th>
-                      <th scope="col">Gender</th>
-                      <th scope="col">Created At</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Current package</th>
-                      <th scope="col">Pic (optional)</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Pay Date</th>
+                      <th scope="col">Last Paid</th>
+                      <th scope="col">Action</th>
                       <th scope="col" />
                     </tr>
                   </thead>
                   <tbody>
-                    {allUsers.map((u) => (
-                      <tr key={u.id}>
+                    {allUserBills.map((u) => (
+                      <tr key={u.user_id}>
                         <td>{u.name}</td>
-                        <td>{u.cnic}</td>
+                        <td>{u.nic}</td>
                         <td>{u.cell_num}</td>
-                        <td>{u.address}</td>
-                        <td>{u.franchise_id}</td>
-                        <td>{u.gender}</td>
-                        <td>{u.created_at}</td>
-                        <td>{u.status === "1" ? "Active" : "Unactive"}</td>
-                        <td>{u.package_id}</td>
-
+                        <td>{u.amount}</td>
+                        <td>{u.pay_date}</td>
+                        <td>{u.last_paid}</td>
                         <td>
-                          <div className="avatar-group">
-                            <a
-                              className="avatar avatar-sm"
-                              href="#pablo"
-                              id="tooltip742438047"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <img
-                                alt="..."
-                                className="rounded-circle"
-                                src={u.pic || userPic}
-                              />
-                            </a>
-                          </div>
-                        </td>
-
-                        <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/single-user-bills/${u.id}  `}
+                          <Button
+                            className="navbar-toggler"
+                            type="button"
+                            onClick={() => this.handleBills(u.user_id)}
                           >
-                            User Bills
-                          </Link>
+                            Pay Bill
+                          </Button>
                         </td>
-                        <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/view-user/${u.id}  `}
-                          >
-                            Veiw
-                          </Link>
-                        </td>
-                        {/* <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/update-user/${u.id}  `}
-                          >
-                            Edit
-                          </Link>
-                        </td> */}
                       </tr>
                     ))}
                   </tbody>
@@ -208,4 +157,4 @@ class Tables extends React.Component {
   }
 }
 
-export default Tables;
+export default UserBills;

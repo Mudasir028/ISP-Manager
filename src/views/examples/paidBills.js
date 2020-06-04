@@ -1,57 +1,28 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-
-import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
-  // Badge,
   Card,
   CardHeader,
   CardFooter,
-  // DropdownMenu,
-  // DropdownItem,
-  // UncontrolledDropdown,
-  // DropdownToggle,
-  // Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  // Progress,
   Table,
   Container,
   Row,
-  // UncontrolledTooltip,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
-
 import isp from "../../services/ispService";
-import userPic from "assets/img/theme/team-4-800x800.jpg";
 
-class Packages extends React.Component {
-  state = { allPackages: [] };
+class PaidBills extends React.Component {
+  state = { paidBills: [] };
 
   async componentDidMount() {
     try {
-      const allPackages = await isp.getAllPackages();
-      this.setState({ allPackages: allPackages.packages });
+      const res = await isp.getPaidBills();
+      this.setState({ paidBills: res.bills });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -60,7 +31,7 @@ class Packages extends React.Component {
   }
 
   render() {
-    const { allPackages } = this.state;
+    const { paidBills } = this.state;
 
     return (
       <>
@@ -72,62 +43,29 @@ class Packages extends React.Component {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">Card tables</h3>
+                  <h3 className="mb-0">Paid Bills</h3>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Type</th>
-                      <th scope="col">Duration</th>
-                      <th scope="col">Charges</th>
-                      <th scope="col">Franchise</th>
-                      <th scope="col">Data Limit</th>
-                      <th scope="col">Creation Date</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Discription</th>
-                      <th scope="col">Pic (optional)</th>
+                      <th scope="col">User Id</th>
+                      <th scope="col">Package Id</th>
+                      <th scope="col">Pay Date</th>
+                      <th scope="col">Created At</th>
+                      <th scope="col">Update At</th>
+                      <th scope="col">Amount Paid</th>
                       <th scope="col" />
                     </tr>
                   </thead>
                   <tbody>
-                    {allPackages.map((p) => (
-                      <tr key={p.id}>
-                        <td>{p.name}</td>
-                        <td>{p.type}</td>
-                        <td>{p.duration}</td>
-                        <td>{p.charges}</td>
-                        <td>{p.franchise_id}</td>
-                        <td>{p.data_limit}</td>
-                        <td>{p.created_at}</td>
-                        <td>{p.status ? "Active" : "Unactive"}</td>
-                        <td>{p.description}</td>
-
-                        <td>
-                          <div className="avatar-group">
-                            <a
-                              className="avatar avatar-sm"
-                              href="#pablo"
-                              id="tooltip742438047"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <img
-                                alt="..."
-                                className="rounded-circle"
-                                src={p.pic || userPic}
-                              />
-                            </a>
-                          </div>
-                        </td>
-
-                        <td>
-                          <Link
-                            className="primary h4 mb-0 text-uppercase d-md"
-                            to={`/admin/view-package/${p.id}`}
-                          >
-                            View
-                          </Link>
-                        </td>
+                    {paidBills.map((u) => (
+                      <tr key={u.user_id}>
+                        <td>{u.user_id}</td>
+                        <td>{u.package_id}</td>
+                        <td>{u.pay_date}</td>
+                        <td>{u.created_at}</td>
+                        <td>{u.updated_at}</td>
+                        <td>{u.amount_paid}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -193,4 +131,4 @@ class Packages extends React.Component {
   }
 }
 
-export default Packages;
+export default PaidBills;
