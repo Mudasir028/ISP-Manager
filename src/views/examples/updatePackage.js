@@ -18,7 +18,7 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import { types } from "../../services/fakeData";
 
-import { toast } from "react-toastify";
+import Toast from "light-toast";
 import isp from "../../services/ispService";
 
 class UpdatePackage extends form {
@@ -48,8 +48,9 @@ class UpdatePackage extends form {
     data: Joi.string().required().label("Data Limit"),
     picUrl: Joi.any()
       .meta({ swaggerType: "file" })
-      .optional()
-      .allow("")
+      // .optional()
+      // .allow("")
+      .required()
       .description("image file"),
     date: Joi.date().required().label("Joining Date"),
     status: Joi.boolean().required().label("Status"),
@@ -60,7 +61,6 @@ class UpdatePackage extends form {
     try {
       const id = this.props.match.params.package_id;
       const getPackage = isp.getPackageDetails(id);
-
       const Franchises = isp.getAllFranchises();
       const [package1, allFranchises] = await Promise.all([
         getPackage,
@@ -91,10 +91,8 @@ class UpdatePackage extends form {
   }
 
   doSubmit = async () => {
-    console.log("form validated");
-
     try {
-      this.setState({ isSpinner: true });
+      Toast.loading("Loading...");
       const id = this.props.match.params.package_id;
       const {
         name,
@@ -106,7 +104,7 @@ class UpdatePackage extends form {
         description,
       } = this.state.data;
 
-      await isp.updatePackage({
+      const res = await isp.updatePackage({
         name,
         type,
         duration,
@@ -116,6 +114,8 @@ class UpdatePackage extends form {
         description,
         id,
       });
+      Toast.hide();
+      Toast.success(res.msg[0].message, 3000);
       const picUrl = document.querySelector("#picUrl");
       await isp.updatePackagePic(picUrl.files[0], id);
     } catch (ex) {
@@ -125,12 +125,9 @@ class UpdatePackage extends form {
         errors.name = ex.response.data;
         this.setState({ errors });
 
-        toast.error(ex.response.data);
+        Toast.fail(ex.response.data, 3000);
       }
     }
-    this.setState({
-      isSpinner: false,
-    });
   };
 
   handleDuration = () => {
@@ -163,7 +160,7 @@ class UpdatePackage extends form {
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col xs="8">
-                      <h3 className="mb-0">Create Package</h3>
+                      <h3 className="mb-0">Update Package</h3>
                     </Col>
                   </Row>
                 </CardHeader>

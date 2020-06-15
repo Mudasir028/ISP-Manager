@@ -145,7 +145,6 @@ class Form extends Component {
         <CustomInput
           name={name}
           id={name}
-          value={data[name]}
           type={type}
           label={placeholder}
           className="form-control-alternative"
@@ -190,8 +189,6 @@ class Form extends Component {
 
   renderGenderInput(name, lable, type = "radio") {
     const { data, errors } = this.state;
-    console.log("genname");
-    console.log(name);
 
     return (
       <>

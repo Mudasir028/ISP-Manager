@@ -15,12 +15,14 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
+import Toast from "light-toast";
 
 class SingleUserBills extends React.Component {
   state = { singleUserBills: [] };
 
   async componentDidMount() {
     try {
+      Toast.loading("Loading...");
       const user_id = this.props.match.params.user_id;
       const res = await isp.getSingleUserBills(user_id);
       this.setState({ singleUserBills: res.bills });
@@ -29,6 +31,7 @@ class SingleUserBills extends React.Component {
         console.log(ex.response.data);
       }
     }
+    Toast.hide();
   }
 
   render() {

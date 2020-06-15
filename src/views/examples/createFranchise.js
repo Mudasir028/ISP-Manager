@@ -19,7 +19,6 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import Toast from "light-toast";
 
-import { toast } from "react-toastify";
 import isp from "../../services/ispService";
 
 class CreateFranchise extends form {
@@ -39,6 +38,15 @@ class CreateFranchise extends form {
     details: Joi.string().required().label("Details"),
   };
 
+  handleFormReset = () => {
+    const data = { ...this.state.data };
+    data.name = "";
+    data.area = "";
+    data.details = "";
+
+    this.setState({ data });
+  };
+
   doSubmit = async () => {
     // Toast.info(content, duration, onClose);
     // Toast.success(content, duration, onClose);
@@ -51,6 +59,7 @@ class CreateFranchise extends form {
       const res = await isp.createFranchise(data.name, data.area, data.details);
       Toast.hide();
       Toast.success(res.msg[0].message, 3000);
+      this.handleFormReset();
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };

@@ -17,7 +17,7 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 
-import { toast } from "react-toastify";
+import Toast from "light-toast";
 import isp from "../../services/ispService";
 
 class ViewUser extends form {
@@ -27,6 +27,7 @@ class ViewUser extends form {
 
   async componentDidMount() {
     try {
+      Toast.loading("Loading...");
       const id = this.props.match.params.user_id;
       const user = await isp.getUserDetails(id);
 
@@ -40,6 +41,7 @@ class ViewUser extends form {
         console.log(ex.response.data);
       }
     }
+    Toast.hide();
   }
 
   render() {

@@ -15,12 +15,14 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
+import Toast from "light-toast";
 
 class Subscriptions extends React.Component {
   state = { subscriptions: [] };
 
   async componentDidMount() {
     try {
+      Toast.loading("Loading...");
       const res = await isp.getSubscriptions();
       this.setState({ subscriptions: res.subscriptions });
     } catch (ex) {
@@ -28,6 +30,7 @@ class Subscriptions extends React.Component {
         console.log(ex.response.data);
       }
     }
+    Toast.hide();
   }
 
   render() {

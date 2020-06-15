@@ -17,7 +17,7 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 
-import { toast } from "react-toastify";
+import Toast from "light-toast";
 import isp from "../../services/ispService";
 
 class ViewPackage extends form {
@@ -40,6 +40,7 @@ class ViewPackage extends form {
 
   async componentDidMount() {
     try {
+      Toast.loading("Loading...");
       const id = this.props.match.params.package_id;
       const package1 = await isp.getPackageDetails(id);
       const packageDetails = package1.Packages[0];
@@ -59,6 +60,7 @@ class ViewPackage extends form {
         console.log(ex.response.data);
       }
     }
+    Toast.hide();
   }
 
   render() {

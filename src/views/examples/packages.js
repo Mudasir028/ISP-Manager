@@ -44,12 +44,14 @@ import Header from "components/Headers/Header.js";
 
 import isp from "../../services/ispService";
 import userPic from "assets/img/theme/team-4-800x800.jpg";
+import Toast from "light-toast";
 
 class Packages extends React.Component {
   state = { allPackages: [] };
 
   async componentDidMount() {
     try {
+      Toast.loading("Loading...");
       const allPackages = await isp.getAllPackages();
       this.setState({ allPackages: allPackages.packages });
     } catch (ex) {
@@ -57,6 +59,7 @@ class Packages extends React.Component {
         console.log(ex.response.data);
       }
     }
+    Toast.hide();
   }
 
   render() {
@@ -72,7 +75,7 @@ class Packages extends React.Component {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">Card tables</h3>
+                  <h3 className="mb-0">All Packages</h3>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
@@ -87,7 +90,7 @@ class Packages extends React.Component {
                       <th scope="col">Status</th>
                       <th scope="col">Discription</th>
                       <th scope="col">Pic (optional)</th>
-                      <th scope="col" />
+                      <th scope="col">View Details</th>
                     </tr>
                   </thead>
                   <tbody>

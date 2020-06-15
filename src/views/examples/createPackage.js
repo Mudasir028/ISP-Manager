@@ -17,8 +17,8 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { types } from "../../services/fakeData";
-import { toast } from "react-toastify";
 import isp from "../../services/ispService";
+import Toast from "light-toast";
 
 class CreatePackage extends form {
   state = {
@@ -58,11 +58,24 @@ class CreatePackage extends form {
     }
   }
 
-  doSubmit = async () => {
-    console.log("form validated");
+  handleFormReset = () => {
+    const data = { ...this.state.data };
 
+    data.name = "";
+    data.type = "Monthly";
+    data.duration = 30;
+    data.charges = "";
+    data.franchise = "";
+    data.data = "";
+    data.description = "";
+
+    this.setState({ data });
+  };
+
+  doSubmit = async () => {
     try {
-      this.setState({ isSpinner: true });
+      Toast.loading("Loading...");
+
       const {
         name,
         type,
@@ -73,7 +86,7 @@ class CreatePackage extends form {
         description,
       } = this.state.data;
 
-      await isp.createPackage({
+      const res = await isp.createPackage({
         name,
         type,
         duration,
@@ -82,6 +95,9 @@ class CreatePackage extends form {
         data_limit,
         description,
       });
+      Toast.hide();
+      Toast.success(res.msg[0].message, 3000);
+      this.handleFormReset();
     } catch (ex) {
       console.log(ex);
       if (ex.response && ex.response.status === 400) {
@@ -89,12 +105,9 @@ class CreatePackage extends form {
         errors.name = ex.response.data;
         this.setState({ errors });
 
-        toast.error(ex.response.data);
+        Toast.fail(ex.response.data, 3000);
       }
     }
-    this.setState({
-      isSpinner: false,
-    });
   };
 
   handleDuration = () => {

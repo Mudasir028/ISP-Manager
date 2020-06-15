@@ -17,8 +17,8 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import Toast from "light-toast";
 
-import { toast } from "react-toastify";
 import isp from "../../services/ispService";
 
 class UpdateFranchise extends form {
@@ -29,7 +29,6 @@ class UpdateFranchise extends form {
       details: "",
     },
     errors: {},
-    isSpinner: false,
   };
 
   schema = {
@@ -58,10 +57,18 @@ class UpdateFranchise extends form {
 
   doSubmit = async () => {
     try {
-      this.setState({ isSpinner: true });
+      Toast.loading("Loading...");
+
       const id = this.props.match.params.franchise_id;
       const { data } = this.state;
-      await isp.updateFranchise(data.name, data.area, data.details, id);
+      const res = await isp.updateFranchise(
+        data.name,
+        data.area,
+        data.details,
+        id
+      );
+      Toast.hide();
+      Toast.success(res.msg[0].message, 3000);
     } catch (ex) {
       console.log(ex);
       if (ex.response && ex.response.status === 400) {
@@ -69,12 +76,9 @@ class UpdateFranchise extends form {
         errors.name = ex.response.data;
         this.setState({ errors });
 
-        toast.error(ex.response.data);
+        Toast.fail(ex.response.data, 3000);
       }
     }
-    this.setState({
-      isSpinner: false,
-    });
   };
 
   render() {

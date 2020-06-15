@@ -33,12 +33,14 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
+import Toast from "light-toast";
 
 class Franchise extends React.Component {
   state = { allFranchises: [] };
 
   async componentDidMount() {
     try {
+      Toast.loading("Loading...");
       const allFranchises = await isp.getAllFranchises();
       this.setState({ allFranchises: allFranchises.franchises });
     } catch (ex) {
@@ -46,6 +48,7 @@ class Franchise extends React.Component {
         console.log(ex.response.data);
       }
     }
+    Toast.hide();
   }
 
   render() {

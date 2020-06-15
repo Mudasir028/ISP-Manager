@@ -17,7 +17,7 @@ import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
 import form from "../../components/common/form";
 import Joi from "joi-browser";
-import { toast } from "react-toastify";
+import Toast from "light-toast";
 
 class SubscribePackage extends form {
   state = {
@@ -53,16 +53,17 @@ class SubscribePackage extends form {
   }
 
   doSubmit = async () => {
-    console.log("form validated");
-
     try {
+      Toast.loading("Loading...");
       this.setState({ isSpinner: true });
       const { user, package1 } = this.state.data;
 
-      await isp.createSubscription({
+      const res = await isp.createSubscription({
         user_id: user,
         package_id: package1,
       });
+      Toast.hide();
+      Toast.success(res.msg[0].message, 3000);
     } catch (ex) {
       console.log(ex);
       if (ex.response && ex.response.status === 400) {
@@ -70,7 +71,7 @@ class SubscribePackage extends form {
         errors.name = ex.response.data;
         this.setState({ errors });
 
-        toast.error(ex.response.data);
+        Toast.fail(ex.response.data, 3000);
       }
     }
     this.setState({

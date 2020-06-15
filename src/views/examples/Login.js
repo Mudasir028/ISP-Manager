@@ -21,9 +21,9 @@ import form from "../../components/common/form";
 // reactstrap components
 import { Button, Card, CardHeader, CardBody, Form, Row, Col } from "reactstrap";
 
-import { Redirect } from "react-router-dom";
 import Joi from "joi-browser";
 import auth from "../../services/authService";
+import Toast from "light-toast";
 
 class Login extends form {
   state = {
@@ -41,6 +41,7 @@ class Login extends form {
 
   doSubmit = async () => {
     try {
+      Toast.loading("Loading...");
       const { data } = this.state;
       await auth.login(data.username, data.password);
 
@@ -57,6 +58,7 @@ class Login extends form {
         this.setState({ errors });
       }
     }
+    Toast.hide();
   };
 
   render() {
@@ -148,7 +150,7 @@ class Login extends form {
                 <small>Forgot password?</small>
               </a>
             </Col>
-            <Col className="text-right" xs="6">
+            {/* <Col className="text-right" xs="6">
               <a
                 className="text-light"
                 href="#pablo"
@@ -156,7 +158,7 @@ class Login extends form {
               >
                 <small>Create new account</small>
               </a>
-            </Col>
+            </Col> */}
           </Row>
         </Col>
       </>

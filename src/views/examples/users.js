@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 import { Link } from "react-router-dom";
@@ -43,12 +26,14 @@ import {
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
 import userPic from "assets/img/theme/team-4-800x800.jpg";
+import Toast from "light-toast";
 
 class Tables extends React.Component {
   state = { allUsers: [] };
 
   async componentDidMount() {
     try {
+      Toast.loading("Loading...");
       const allUsers = await isp.getAllUsers();
       this.setState({ allUsers: allUsers.users });
     } catch (ex) {
@@ -56,6 +41,7 @@ class Tables extends React.Component {
         console.log(ex.response.data);
       }
     }
+    Toast.hide();
   }
 
   render() {
@@ -86,7 +72,8 @@ class Tables extends React.Component {
                       <th scope="col">Status</th>
                       <th scope="col">Current package</th>
                       <th scope="col">Pic (optional)</th>
-                      <th scope="col" />
+                      <th scope="col">Bills</th>
+                      <th scope="col">View Details</th>
                     </tr>
                   </thead>
                   <tbody>

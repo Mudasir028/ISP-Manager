@@ -16,12 +16,14 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
+import Toast from "light-toast";
 
 class UserBills extends React.Component {
   state = { allUserBills: [] };
 
   async componentDidMount() {
     try {
+      Toast.loading("Loading...");
       const res = await isp.getAllUserbills();
       this.setState({ allUserBills: res.bills });
     } catch (ex) {
@@ -29,11 +31,15 @@ class UserBills extends React.Component {
         console.log(ex.response.data);
       }
     }
+    Toast.hide();
   }
 
   handleBills = async (user_id) => {
     try {
-      await isp.payUserbill(user_id);
+      Toast.loading("Loading...");
+      const res = await isp.payUserbill(user_id);
+      Toast.hide();
+      Toast.success(res.msg[0].message, 3000);
       const originalAllUserBills = this.state.allUserBills;
       const allUserBills = originalAllUserBills.filter(
         (u) => u.user_id !== user_id

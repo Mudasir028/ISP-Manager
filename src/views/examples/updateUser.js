@@ -20,8 +20,8 @@ import UserHeader from "components/Headers/UserHeader.js";
 
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 
-import { toast } from "react-toastify";
 import isp from "../../services/ispService";
+import Toast from "light-toast";
 
 class UpdateUser extends form {
   state = {
@@ -94,10 +94,8 @@ class UpdateUser extends form {
   }
 
   doSubmit = async () => {
-    console.log("form validated");
-
     try {
-      this.setState({ isSpinner: true });
+      Toast.loading("Loading...");
       const id = this.props.match.params.user_id;
       const {
         name,
@@ -110,7 +108,7 @@ class UpdateUser extends form {
         package1,
       } = this.state.data;
 
-      await isp.updateUser({
+      const res = await isp.updateUser({
         name,
         cnic,
         cell_num,
@@ -120,6 +118,8 @@ class UpdateUser extends form {
         created_at: date,
         id,
       });
+      Toast.hide();
+      Toast.success(res.msg[0].message, 3000);
       await isp.createSubscription({
         user_id: id,
         package_id: package1,
@@ -131,12 +131,9 @@ class UpdateUser extends form {
         errors.name = ex.response.data;
         this.setState({ errors });
 
-        toast.error(ex.response.data);
+        Toast.fail(ex.response.data, 3000);
       }
     }
-    this.setState({
-      isSpinner: false,
-    });
   };
 
   render() {

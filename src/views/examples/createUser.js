@@ -19,8 +19,8 @@ import UserHeader from "components/Headers/UserHeader.js";
 
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 
-import { toast } from "react-toastify";
 import isp from "../../services/ispService";
+import Toast from "light-toast";
 
 class CreateUser extends form {
   state = {
@@ -33,6 +33,7 @@ class CreateUser extends form {
       gender: "",
     },
     errors: {},
+    allUsers: [],
     allFranchises: [],
   };
 
@@ -47,13 +48,16 @@ class CreateUser extends form {
 
   async componentDidMount() {
     try {
-      const allFranchises = await isp.getAllFranchises();
+      const getuser = isp.getAllUsers();
+      const franchise = isp.getAllFranchises();
+      const [allUsers, allFranchises] = await Promise.all([getuser, franchise]);
 
       const data = { ...this.state.data };
       data.franchise = allFranchises.franchises[0].id.toString();
 
       this.setState({
         data,
+        allUsers: allUsers.users,
         allFranchises: allFranchises.franchises,
       });
     } catch (ex) {
@@ -63,9 +67,19 @@ class CreateUser extends form {
     }
   }
 
+  handleFormReset = () => {
+    const data = { ...this.state.data };
+    data.name = "";
+    data.cnic = "";
+    data.number = "";
+    data.address = "";
+    data.franchise = "";
+
+    this.setState({ data });
+  };
+
   doSubmit = async () => {
     try {
-      this.setState({ isSpinner: true });
       const {
         name,
         cnic,
@@ -74,15 +88,33 @@ class CreateUser extends form {
         franchise: franchise_id,
         gender,
       } = this.state.data;
+      const allUsers = this.state.allUsers;
 
-      await isp.createUser({
-        name,
-        cnic,
-        cell_num,
-        address,
-        franchise_id,
-        gender,
-      });
+      const errors = { ...this.state.errors };
+
+      let allreadyUser = allUsers.filter(
+        (user) => user.cnic === cnic || user.cell_num === cell_num
+      );
+      if (allreadyUser[0]) {
+        console.log("allreadyUser");
+        console.log(allreadyUser);
+        errors.cnic = "cnic or phone number already used";
+        this.setState({ errors });
+      } else {
+        Toast.loading("Loading...");
+        const res = await isp.createUser({
+          name,
+          cnic,
+          cell_num,
+          address,
+          franchise_id,
+          gender,
+        });
+        Toast.hide();
+
+        Toast.success(res.msg[0].message, 3000);
+        this.handleFormReset();
+      }
     } catch (ex) {
       console.log(ex);
       if (ex.response && ex.response.status === 400) {
@@ -90,12 +122,9 @@ class CreateUser extends form {
         errors.name = ex.response.data;
         this.setState({ errors });
 
-        toast.error(ex.response.data);
+        Toast.fail(ex.response.data, 3000);
       }
     }
-    this.setState({
-      isSpinner: false,
-    });
   };
 
   render() {
