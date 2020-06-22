@@ -44,12 +44,6 @@ class Footer extends React.Component {
             <Nav className="nav-footer justify-content-center justify-content-xl-end">
               <NavItem>
                 <NavLink href="" rel="noopener noreferrer" target="_blank">
-                  Creative Tim
-                </NavLink>
-              </NavItem>
-
-              <NavItem>
-                <NavLink href="" rel="noopener noreferrer" target="_blank">
                   About Us
                 </NavLink>
               </NavItem>

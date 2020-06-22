@@ -44,11 +44,6 @@ class Login extends React.Component {
                 <Nav className="nav-footer justify-content-center justify-content-xl-end">
                   <NavItem>
                     <NavLink href="" target="_blank">
-                      Creative Tim
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink href="" target="_blank">
                       About Us
                     </NavLink>
                   </NavItem>

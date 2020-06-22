@@ -1,13 +1,13 @@
 {
   "name": "argon-dashboard-react",
   "version": "1.1.0",
-  "homepage": "",
   "description": "React version of Argon Dashboard by Creative Tim",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/creativetimofficial/argon-dashboard-react.git"
   },
+  "homepage": "http://ispmanager.unaux.com",
   "keywords": [
     "react",
     "reactjs",
@@ -47,6 +47,7 @@
     "axios": "^0.19.2",
     "chart.js": "2.9.3",
     "classnames": "2.2.6",
+    "firebase-tools": "^8.4.3",
     "joi-browser": "^13.4.0",
     "jwt-decode": "^2.2.0",
     "light-toast": "^0.2.3",
