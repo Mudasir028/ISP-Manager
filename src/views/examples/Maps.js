@@ -1,27 +1,10 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // react plugin used to create google maps
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker
+  Marker,
 } from "react-google-maps";
 
 // reactstrap components
@@ -31,7 +14,7 @@ import { Card, Container, Row } from "reactstrap";
 import Header from "components/Headers/Header.js";
 // mapTypeId={google.maps.MapTypeId.ROADMAP}
 const MapWrapper = withScriptjs(
-  withGoogleMap(props => (
+  withGoogleMap((props) => (
     <GoogleMap
       defaultZoom={12}
       defaultCenter={{ lat: 40.748817, lng: -73.985428 }}
@@ -41,44 +24,44 @@ const MapWrapper = withScriptjs(
           {
             featureType: "administrative",
             elementType: "labels.text.fill",
-            stylers: [{ color: "#444444" }]
+            stylers: [{ color: "#444444" }],
           },
           {
             featureType: "landscape",
             elementType: "all",
-            stylers: [{ color: "#f2f2f2" }]
+            stylers: [{ color: "#f2f2f2" }],
           },
           {
             featureType: "poi",
             elementType: "all",
-            stylers: [{ visibility: "off" }]
+            stylers: [{ visibility: "off" }],
           },
           {
             featureType: "road",
             elementType: "all",
-            stylers: [{ saturation: -100 }, { lightness: 45 }]
+            stylers: [{ saturation: -100 }, { lightness: 45 }],
           },
           {
             featureType: "road.highway",
             elementType: "all",
-            stylers: [{ visibility: "simplified" }]
+            stylers: [{ visibility: "simplified" }],
           },
           {
             featureType: "road.arterial",
             elementType: "labels.icon",
-            stylers: [{ visibility: "off" }]
+            stylers: [{ visibility: "off" }],
           },
           {
             featureType: "transit",
             elementType: "all",
-            stylers: [{ visibility: "off" }]
+            stylers: [{ visibility: "off" }],
           },
           {
             featureType: "water",
             elementType: "all",
-            stylers: [{ color: "#5e72e4" }, { visibility: "on" }]
-          }
-        ]
+            stylers: [{ color: "#5e72e4" }, { visibility: "on" }],
+          },
+        ],
       }}
     >
       <Marker position={{ lat: 40.748817, lng: -73.985428 }} />

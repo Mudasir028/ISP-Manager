@@ -137,18 +137,6 @@ class UpdateUser extends form {
   };
 
   render() {
-    const {
-      name,
-      cnic,
-      status,
-      date,
-      franchise,
-      package1,
-      picUrl,
-      gender,
-      address,
-      number,
-    } = this.state.data;
     const { allFranchises, allPackages } = this.state;
 
     return (

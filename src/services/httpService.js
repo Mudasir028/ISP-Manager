@@ -1,6 +1,6 @@
 import axios from "axios";
 import logger from "./logService";
-import { toast } from "react-toastify";
+import Toast from "light-toast";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -15,7 +15,7 @@ axios.interceptors.response.use(null, (error) => {
 
   if (!expectedError) {
     logger.log(error);
-    toast.error("An unexpected error occurrred.");
+    Toast.fail("An unexpected error occurrred.", 3000);
   }
 
   return Promise.reject(error);
@@ -27,9 +27,7 @@ axios.interceptors.request.use((config) => {
 });
 
 function setJwt(jwt) {
-  console.log(jwt);
   axios.defaults.headers.common["AUTHENTICATION"] = jwt;
-  // axios.defaults.headers.common["x-auth-token"] = jwt;
 }
 
 export default {

@@ -4,23 +4,15 @@ import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
-  // Badge,s
   Card,
   CardHeader,
   CardFooter,
-  // DropdownMenu,
-  // DropdownItem,
-  // UncontrolledDropdown,
-  // DropdownToggle,
-  // Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  // Progress,
   Table,
   Container,
   Row,
-  // UncontrolledTooltip,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -71,7 +63,7 @@ class Tables extends React.Component {
                       <th scope="col">Created At</th>
                       <th scope="col">Status</th>
                       <th scope="col">Current package</th>
-                      <th scope="col">Pic (optional)</th>
+                      {/* <th scope="col">Pic (optional)</th> */}
                       <th scope="col">Bills</th>
                       <th scope="col">View Details</th>
                     </tr>
@@ -89,7 +81,7 @@ class Tables extends React.Component {
                         <td>{u.status === "1" ? "Active" : "Unactive"}</td>
                         <td>{u.package_id}</td>
 
-                        <td>
+                        {/* <td>
                           <div className="avatar-group">
                             <a
                               className="avatar avatar-sm"
@@ -104,7 +96,7 @@ class Tables extends React.Component {
                               />
                             </a>
                           </div>
-                        </td>
+                        </td> */}
 
                         <td>
                           <Link

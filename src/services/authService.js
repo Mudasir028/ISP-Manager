@@ -1,4 +1,4 @@
-import jwtDecode from "jwt-decode";
+// import jwtDecode from "jwt-decode";
 import http from "./httpService";
 // import { apiUrl } from "../config.json";
 
@@ -27,7 +27,7 @@ export async function login(username, password) {
 //   localStorage.setItem(tokenKey, jwt);o
 // }
 
-async function logout(username) {
+export async function logout(username) {
   try {
     await http.post(apiEndpoint.logout, { username });
   } catch (ex) {}

@@ -9,8 +9,6 @@ import {
   InputGroupText,
 } from "reactstrap";
 
-// import { toast } from "react-toastify";
-
 class Form extends Component {
   state = {
     data: {},
@@ -25,7 +23,6 @@ class Form extends Component {
     const errors = {};
     for (let item of error.details) {
       errors[item.path[0]] = item.message;
-      // toast.error(item.message);
     }
     return errors;
   };
