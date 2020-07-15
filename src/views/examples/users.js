@@ -10,11 +10,11 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
-  Table,
   Container,
   Row,
 } from "reactstrap";
 // core components
+import TableComponent from "components/common/table";
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
 import userPic from "assets/img/theme/team-4-800x800.jpg";
@@ -22,6 +22,53 @@ import Toast from "light-toast";
 
 class Tables extends React.Component {
   state = { allUsers: [] };
+
+  columns = [
+    { path: "name", label: "Name" },
+    {
+      path: "cnic",
+      label: "CNIC",
+    },
+    {
+      path: "cell_num",
+      label: "Number",
+    },
+    { path: "address", label: "Address" },
+    { path: "franchise_id", label: "Franchise" },
+    { path: "gender", label: "Gender" },
+    { path: "created_at", label: "Created At" },
+    {
+      path: "status",
+      label: "Status",
+      content: (u) => (u.status === "1" ? "Active" : "Unactive"),
+    },
+    { path: "package_id", label: "Package" },
+    { path: "updated_at", label: "Updated At" },
+    {
+      path: "Bills",
+      label: "Bills",
+      content: (u) => (
+        <Link
+          className="primary h5 mb-0 text-uppercase d-md"
+          to={`/admin/single-user-bills/${u.id}  `}
+        >
+          User Bills
+        </Link>
+      ),
+    },
+    {
+      path: "View",
+      label: "View Detail",
+      content: (u) => (
+        <Link
+          className="primary h5 mb-0 text-uppercase d-md"
+          to={`/admin/view-user/${u.id}  `}
+        >
+          Veiw
+        </Link>
+      ),
+    },
+  ];
 
   async componentDidMount() {
     try {
@@ -51,37 +98,14 @@ class Tables extends React.Component {
                 <CardHeader className="border-0">
                   <h3 className="mb-0">All Users</h3>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">CNIC</th>
-                      <th scope="col">Number</th>
-                      <th scope="col">Address</th>
-                      <th scope="col">Franchise</th>
-                      <th scope="col">Gender</th>
-                      <th scope="col">Created At</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Current package</th>
-                      {/* <th scope="col">Pic (optional)</th> */}
-                      <th scope="col">Bills</th>
-                      <th scope="col">View Details</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {allUsers.map((u) => (
-                      <tr key={u.id}>
-                        <td>{u.name}</td>
-                        <td>{u.cnic}</td>
-                        <td>{u.cell_num}</td>
-                        <td>{u.address}</td>
-                        <td>{u.franchise_id}</td>
-                        <td>{u.gender}</td>
-                        <td>{u.created_at}</td>
-                        <td>{u.status === "1" ? "Active" : "Unactive"}</td>
-                        <td>{u.package_id}</td>
+                <TableComponent
+                  columns={this.columns}
+                  data={allUsers}
+                  classes="table align-items-center table-flush"
+                  sortColumn=""
+                />
 
-                        {/* <td>
+                {/* <td>
                           <div className="avatar-group">
                             <a
                               className="avatar avatar-sm"
@@ -98,34 +122,6 @@ class Tables extends React.Component {
                           </div>
                         </td> */}
 
-                        <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/single-user-bills/${u.id}  `}
-                          >
-                            User Bills
-                          </Link>
-                        </td>
-                        <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/view-user/${u.id}  `}
-                          >
-                            Veiw
-                          </Link>
-                        </td>
-                        {/* <td>
-                          <Link
-                            className="primary h5 mb-0 text-uppercase d-md"
-                            to={`/admin/update-user/${u.id}  `}
-                          >
-                            Edit
-                          </Link>
-                        </td> */}
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
                 <CardFooter className="py-4">
                   <nav aria-label="...">
                     <Pagination
