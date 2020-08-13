@@ -13,12 +13,25 @@ import {
   Row,
 } from "reactstrap";
 // core components
+import TableComponent from "components/common/table";
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
 import Toast from "light-toast";
 
 class PaidBills extends React.Component {
   state = { paidBills: [] };
+
+  columns = [
+    { path: "user_id", label: "User Id" },
+    { path: "package_id", label: "Package Id" },
+    { path: "pay_date", label: "Pay Date" },
+    {
+      path: "amount_paid",
+      label: "Amount Paid",
+    },
+    { path: "created_at", label: "Created At" },
+    { path: "updated_at", label: "Updated At" },
+  ];
 
   async componentDidMount() {
     try {
@@ -48,43 +61,24 @@ class PaidBills extends React.Component {
                 <CardHeader className="border-0">
                   <h3 className="mb-0">Paid Bills</h3>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">User Id</th>
-                      <th scope="col">Package Id</th>
-                      <th scope="col">Pay Date</th>
-                      <th scope="col">Created At</th>
-                      <th scope="col">Update At</th>
-                      <th scope="col">Amount Paid</th>
-                      <th scope="col" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paidBills.map((u) => (
-                      <tr key={u.user_id}>
-                        <td>{u.user_id}</td>
-                        <td>{u.package_id}</td>
-                        <td>{u.pay_date}</td>
-                        <td>{u.created_at}</td>
-                        <td>{u.updated_at}</td>
-                        <td>{u.amount_paid}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+
+                <TableComponent
+                  columns={this.columns}
+                  data={paidBills}
+                  classes="table align-items-center table-flush"
+                  sortColumn=""
+                />
+
                 <CardFooter className="py-4">
                   <nav aria-label="...">
                     <Pagination
                       className="pagination justify-content-end mb-0"
-                      listClassName="justify-content-end mb-0"
-                    >
+                      listClassName="justify-content-end mb-0">
                       <PaginationItem className="disabled">
                         <PaginationLink
                           href="#pablo"
                           onClick={(e) => e.preventDefault()}
-                          tabIndex="-1"
-                        >
+                          tabIndex="-1">
                           <i className="fas fa-angle-left" />
                           <span className="sr-only">Previous</span>
                         </PaginationLink>
@@ -92,32 +86,28 @@ class PaidBills extends React.Component {
                       <PaginationItem className="active">
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
+                          onClick={(e) => e.preventDefault()}>
                           1
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
+                          onClick={(e) => e.preventDefault()}>
                           2 <span className="sr-only">(current)</span>
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
+                          onClick={(e) => e.preventDefault()}>
                           3
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
+                          onClick={(e) => e.preventDefault()}>
                           <i className="fas fa-angle-right" />
                           <span className="sr-only">Next</span>
                         </PaginationLink>

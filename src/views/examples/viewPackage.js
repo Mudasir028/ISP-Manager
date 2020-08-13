@@ -107,7 +107,7 @@ class ViewPackage extends form {
                       <Link
                         className="primary h5 mb-0 text-uppercase d-md"
                         // to={`/admin/update-user/${u.id}  `}
-                        to={`/admin/update-package/${this.props.match.params.package_id}  `}
+                        to={`/isp/update-package/${this.props.match.params.package_id}  `}
                       >
                         Edit
                       </Link>

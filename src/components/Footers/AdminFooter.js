@@ -43,7 +43,7 @@ class Footer extends React.Component {
           <Col xl="6">
             <Nav className="nav-footer justify-content-center justify-content-xl-end">
               <NavItem>
-                <NavLink href="" rel="noopener noreferrer" target="_blank">
+                <NavLink href="http://smarnovativelabs.com" rel="noopener noreferrer" target="_blank">
                   About Us
                 </NavLink>
               </NavItem>

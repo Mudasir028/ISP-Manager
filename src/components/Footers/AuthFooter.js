@@ -43,7 +43,7 @@ class Login extends React.Component {
               <Col xl="6">
                 <Nav className="nav-footer justify-content-center justify-content-xl-end">
                   <NavItem>
-                    <NavLink href="" target="_blank">
+                    <NavLink href="http://smarnovativelabs.com" target="_blank">
                       About Us
                     </NavLink>
                   </NavItem>

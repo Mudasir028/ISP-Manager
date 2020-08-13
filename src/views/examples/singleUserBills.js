@@ -13,12 +13,29 @@ import {
   Row,
 } from "reactstrap";
 // core components
+import TableComponent from "components/common/table";
 import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
 import Toast from "light-toast";
 
 class SingleUserBills extends React.Component {
   state = { singleUserBills: [] };
+
+  columns = [
+    { path: "user_id", label: "User Id" },
+    {
+      path: "package_id",
+      label: "Package Id",
+    },
+    {
+      path: "pay_date",
+      label: "Pay Date",
+    },
+    { path: "amount_paid", label: "Amount Paid" },
+    { path: "created_at", label: "Created At" },
+    { path: "updated_at", label: "Updated At" },
+    
+  ];
 
   async componentDidMount() {
     try {
@@ -49,31 +66,13 @@ class SingleUserBills extends React.Component {
                 <CardHeader className="border-0">
                   <h3 className="mb-0">Single User Bills</h3>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">User Id</th>
-                      <th scope="col">Package Id</th>
-                      <th scope="col">Pay Date</th>
-                      <th scope="col">Created At</th>
-                      <th scope="col">Update At</th>
-                      <th scope="col">Amount Paid</th>
-                      <th scope="col" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {singleUserBills.map((u) => (
-                      <tr key={u.user_id}>
-                        <td>{u.user_id}</td>
-                        <td>{u.package_id}</td>
-                        <td>{u.pay_date}</td>
-                        <td>{u.created_at}</td>
-                        <td>{u.updated_at}</td>
-                        <td>{u.amount_paid}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                <TableComponent
+                  columns={this.columns}
+                  data={singleUserBills}
+                  classes="table align-items-center table-flush"
+                  sortColumn=""
+                />
+               
                 <CardFooter className="py-4">
                   <nav aria-label="...">
                     <Pagination

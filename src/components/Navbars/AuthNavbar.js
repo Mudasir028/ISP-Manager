@@ -73,7 +73,7 @@ class AdminNavbar extends React.Component {
                 <NavItem>
                   <NavLink
                     className="nav-link-icon"
-                    to="/admin/user-profile"
+                    to="/isp/user-profile"
                     tag={Link}
                   >
                     <i className="ni ni-single-02" />
@@ -83,7 +83,7 @@ class AdminNavbar extends React.Component {
                 <NavItem>
                   <NavLink
                     className="nav-link-icon"
-                    to="/admin/users"
+                    to="/isp/users"
                     tag={Link}
                   >
                     <i className="ni ni-single-02" />
@@ -93,7 +93,7 @@ class AdminNavbar extends React.Component {
                 <NavItem>
                   <NavLink
                     className="nav-link-icon"
-                    to="/admin/packages"
+                    to="/isp/packages"
                     tag={Link}
                   >
                     <i className="ni ni-single-02" />
@@ -103,7 +103,7 @@ class AdminNavbar extends React.Component {
                 <NavItem>
                   <NavLink
                     className="nav-link-icon"
-                    to="/admin/franchise"
+                    to="/isp/franchise"
                     tag={Link}
                   >
                     <i className="ni ni-single-02" />
@@ -113,7 +113,7 @@ class AdminNavbar extends React.Component {
                 <NavItem>
                   <NavLink
                     className="nav-link-icon"
-                    to="/admin/create-user"
+                    to="/isp/create-user"
                     tag={Link}
                   >
                     <i className="ni ni-single-02" />
@@ -123,7 +123,7 @@ class AdminNavbar extends React.Component {
                 <NavItem>
                   <NavLink
                     className="nav-link-icon"
-                    to="/admin/create-package"
+                    to="/isp/create-package"
                     tag={Link}
                   >
                     <i className="ni ni-single-02" />
@@ -133,7 +133,7 @@ class AdminNavbar extends React.Component {
                 <NavItem>
                   <NavLink
                     className="nav-link-icon"
-                    to="/admin/create-Franchise"
+                    to="/isp/create-Franchise"
                     tag={Link}
                   >
                     <i className="ni ni-single-02" />

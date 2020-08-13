@@ -70,7 +70,7 @@ class ViewFranchise extends form {
                     <Col className="text-right" xs="4">
                       <Link
                         className="primary h4 mb-0 text-uppercase d-md"
-                        to={`/admin/update-franchise/${this.props.match.params.franchise_id}`}
+                        to={`/isp/update-franchise/${this.props.match.params.franchise_id}`}
                       >
                         Edit
                       </Link>

@@ -12,13 +12,10 @@ const tokenKey = "token";
 http.setJwt(getJwt());
 
 export async function login(username, password) {
-  // const formData = new FormData();
-  // formData.append("username", username);
-  // formData.append("password", password);
-  const { data: user } = await http.post(apiEndpoint.login, {
-    username,
-    password,
-  });
+  const formData = new FormData();
+  formData.append("username", username);
+  formData.append("password", password);
+  const { data: user } = await http.post(apiEndpoint.login, formData);
   const jwt = user.user[0].token;
   localStorage.setItem(tokenKey, jwt);
 }

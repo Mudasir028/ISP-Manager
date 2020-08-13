@@ -89,7 +89,7 @@ class ViewUser extends form {
                       <Link
                         className="primary h5 mb-0 text-uppercase d-md"
                         // to={`/admin/update-user/${u.id}  `}
-                        to={`/admin/update-user/${this.props.match.params.user_id}  `}
+                        to={`/isp/update-user/${this.props.match.params.user_id}  `}
                       >
                         Edit
                       </Link>

@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
@@ -42,7 +26,8 @@ class Admin extends React.Component {
   }
   getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
+      // if (prop.layout === "/admin") {
+      if (prop.layout === "/isp") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -74,7 +59,8 @@ class Admin extends React.Component {
           {...this.props}
           routes={routes}
           logo={{
-            innerLink: "/admin/index",
+            // innerLink: "/admin/index",
+            innerLink: "/isp/users",
             imgSrc: require("assets/img/brand/argon-react.png"),
             imgAlt: "...",
           }}
@@ -86,30 +72,31 @@ class Admin extends React.Component {
           />
           <Switch>
             {this.getRoutes(routes)}
-            <Route path="/admin/logout" component={Logout} />
-            <Route path="/admin/view-user/:user_id" component={ViewUser} />
-            <Route path="/admin/update-user/:user_id" component={UpdateUser} />
+            <Route path="/isp/logout" component={Logout} />
+            <Route path="/isp/view-user/:user_id" component={ViewUser} />
+            <Route path="/isp/update-user/:user_id" component={UpdateUser} />
             <Route
-              path="/admin/single-user-bills/:user_id"
+              path="/isp/single-user-bills/:user_id"
               component={SingleUserBills}
             />
             <Route
-              path="/admin/view-package/:package_id"
+              path="/isp/view-package/:package_id"
               component={ViewPackage}
             />
             <Route
-              path="/admin/update-package/:package_id"
+              path="/isp/update-package/:package_id"
               component={UpdatePackage}
             />
             <Route
-              path="/admin/view-franchise/:franchise_id"
+              path="/isp/view-franchise/:franchise_id"
               component={ViewFranchise}
             />
             <Route
-              path="/admin/update-franchise/:franchise_id"
+              path="/isp/update-franchise/:franchise_id"
               component={UpdateFranchise}
             />
-            <Redirect from="*" to="/admin/index" />
+            {/* <Redirect from="*" to="/admin/index" /> */}
+            <Redirect from="*" to="/isp/users" />
           </Switch>
           <Container fluid>
             <AdminFooter />

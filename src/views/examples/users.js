@@ -50,7 +50,7 @@ class Tables extends React.Component {
       content: (u) => (
         <Link
           className="primary h5 mb-0 text-uppercase d-md"
-          to={`/admin/single-user-bills/${u.id}  `}
+          to={`/isp/single-user-bills/${u.id}  `}
         >
           User Bills
         </Link>
@@ -62,7 +62,7 @@ class Tables extends React.Component {
       content: (u) => (
         <Link
           className="primary h5 mb-0 text-uppercase d-md"
-          to={`/admin/view-user/${u.id}  `}
+          to={`/isp/view-user/${u.id}  `}
         >
           Veiw
         </Link>

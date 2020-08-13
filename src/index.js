@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createBrowserHistory } from "history";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import "assets/plugins/nucleo/css/nucleo.css";
@@ -11,21 +12,30 @@ import AuthLayout from "layouts/Auth.js";
 import auth from "./services/authService";
 
 const user = auth.getCurrentUser();
+const hist = createBrowserHistory({ basename: process.env.REACT_APP_BASENAME });
 
 ReactDOM.render(
-  <BrowserRouter basename={process.env.REACT_APP_BASENAME}>
+  <BrowserRouter history={hist}>
     <Switch>
       {user ? (
-        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        <Route path="/isp" render={(props) => <AdminLayout {...props} />} />
       ) : (
         <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
       )}
       {user ? (
-        <Redirect from="/" to="/admin/index" />
+        // <Redirect from="/" to="/admin/index" />
+        <>
+        <Redirect to="/" />
+        <Redirect from="/" to="/isp/users" />
+        </>
       ) : (
+        <>
+        <Redirect to="/" />
         <Redirect from="/" to="/auth/login" />
+        </>
       )}
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")
 );
+ 

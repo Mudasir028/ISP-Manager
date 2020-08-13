@@ -15,6 +15,7 @@ import {
   Row,
 } from "reactstrap";
 // core components
+import TableComponent from "components/common/table";
 import Header from "components/Headers/Header.js";
 
 import isp from "../../services/ispService";
@@ -23,6 +24,55 @@ import Toast from "light-toast";
 
 class Packages extends React.Component {
   state = { allPackages: [] };
+
+  columns = [
+    { path: "name", label: "Name" },
+    {
+      path: "type",
+      label: "Type",
+    },
+    {
+      path: "duration",
+      label: "Duration",
+    },
+    { path: "charges", label: "Charges" },
+    { path: "franchise_id", label: "Franchise" },
+    { path: "data_limit", label: "Data Limit" },
+    {
+      path: "status",
+      label: "Status",
+      content: (p) => (p.status === "1" ? "Active" : "Unactive"),
+    },
+    { path: "description", label: "Description" },
+    {
+      path: "pic",
+      label: "Pic (optional)",
+      content: (p) => (
+        <div className="avatar-group">
+          <a
+            className="avatar avatar-sm"
+            href="#pablo"
+            id="tooltip742438047"
+            onClick={(e) => e.preventDefault()}>
+            <img alt="..." className="rounded-circle" src={p.pic || userPic} />
+          </a>
+        </div>
+      ),
+    },
+    { path: "created_at", label: "Created At" },
+    { path: "updated_at", label: "Updated At" },
+    {
+      path: "View",
+      label: "View Detail",
+      content: (p) => (
+        <Link
+          className="primary h5 mb-0 text-uppercase d-md"
+          to={`/isp/view-package/${p.id}`}>
+          Veiw
+        </Link>
+      ),
+    },
+  ];
 
   async componentDidMount() {
     try {
@@ -52,76 +102,23 @@ class Packages extends React.Component {
                 <CardHeader className="border-0">
                   <h3 className="mb-0">All Packages</h3>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Type</th>
-                      <th scope="col">Duration</th>
-                      <th scope="col">Charges</th>
-                      <th scope="col">Franchise</th>
-                      <th scope="col">Data Limit</th>
-                      <th scope="col">Creation Date</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Discription</th>
-                      <th scope="col">Pic (optional)</th>
-                      <th scope="col">View Details</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {allPackages.map((p) => (
-                      <tr key={p.id}>
-                        <td>{p.name}</td>
-                        <td>{p.type}</td>
-                        <td>{p.duration}</td>
-                        <td>{p.charges}</td>
-                        <td>{p.franchise_id}</td>
-                        <td>{p.data_limit}</td>
-                        <td>{p.created_at}</td>
-                        <td>{p.status ? "Active" : "Unactive"}</td>
-                        <td>{p.description}</td>
+                <TableComponent
+                  columns={this.columns}
+                  data={allPackages}
+                  classes="table align-items-center table-flush"
+                  sortColumn=""
+                />
 
-                        <td>
-                          <div className="avatar-group">
-                            <a
-                              className="avatar avatar-sm"
-                              href="#pablo"
-                              id="tooltip742438047"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <img
-                                alt="..."
-                                className="rounded-circle"
-                                src={p.pic || userPic}
-                              />
-                            </a>
-                          </div>
-                        </td>
-
-                        <td>
-                          <Link
-                            className="primary h4 mb-0 text-uppercase d-md"
-                            to={`/admin/view-package/${p.id}`}
-                          >
-                            View
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
                 <CardFooter className="py-4">
                   <nav aria-label="...">
                     <Pagination
                       className="pagination justify-content-end mb-0"
-                      listClassName="justify-content-end mb-0"
-                    >
+                      listClassName="justify-content-end mb-0">
                       <PaginationItem className="disabled">
                         <PaginationLink
                           href="#pablo"
                           onClick={(e) => e.preventDefault()}
-                          tabIndex="-1"
-                        >
+                          tabIndex="-1">
                           <i className="fas fa-angle-left" />
                           <span className="sr-only">Previous</span>
                         </PaginationLink>
@@ -129,32 +126,28 @@ class Packages extends React.Component {
                       <PaginationItem className="active">
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
+                          onClick={(e) => e.preventDefault()}>
                           1
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
+                          onClick={(e) => e.preventDefault()}>
                           2 <span className="sr-only">(current)</span>
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
+                          onClick={(e) => e.preventDefault()}>
                           3
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
+                          onClick={(e) => e.preventDefault()}>
                           <i className="fas fa-angle-right" />
                           <span className="sr-only">Next</span>
                         </PaginationLink>
