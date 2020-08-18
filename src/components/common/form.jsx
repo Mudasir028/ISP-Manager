@@ -167,10 +167,10 @@ class Form extends Component {
           type="select"
           className="form-control-alternative"
           onChange={async (e) => {
+            console.log(e);
             await this.handleChange(e);
             if (handleSelectChange) handleSelectChange();
-          }}
-        >
+          }}>
           {options.map((option) => (
             <option key={option.id} value={option.id}>
               {option.name}

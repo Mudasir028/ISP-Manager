@@ -17,17 +17,19 @@ class TableBody extends Component {
     const { columns, data } = this.props;
 
     return (
-      <tbody>
-        {data.map(item => (
-          <tr key={item.id}>
-            {columns.map(column => (
-              <td key={this.createKey(item, column)}>
-                {this.renderCell(item, column)}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
+      <>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.id}>
+              {columns.map((column) => (
+                <td key={this.createKey(item, column)}>
+                  {this.renderCell(item, column)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </>
     );
   }
 }

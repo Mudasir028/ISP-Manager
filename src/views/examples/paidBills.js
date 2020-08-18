@@ -38,6 +38,9 @@ class PaidBills extends React.Component {
       Toast.loading("loading...");
       const res = await isp.getPaidBills();
       this.setState({ paidBills: res.bills });
+      if (res.msg[0].code === "400") {
+        window.location = process.env.REACT_APP_BASENAME + "/isp/logout";
+      }
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -73,12 +76,14 @@ class PaidBills extends React.Component {
                   <nav aria-label="...">
                     <Pagination
                       className="pagination justify-content-end mb-0"
-                      listClassName="justify-content-end mb-0">
+                      listClassName="justify-content-end mb-0"
+                    >
                       <PaginationItem className="disabled">
                         <PaginationLink
                           href="#pablo"
                           onClick={(e) => e.preventDefault()}
-                          tabIndex="-1">
+                          tabIndex="-1"
+                        >
                           <i className="fas fa-angle-left" />
                           <span className="sr-only">Previous</span>
                         </PaginationLink>
@@ -86,28 +91,32 @@ class PaidBills extends React.Component {
                       <PaginationItem className="active">
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}>
+                          onClick={(e) => e.preventDefault()}
+                        >
                           1
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}>
+                          onClick={(e) => e.preventDefault()}
+                        >
                           2 <span className="sr-only">(current)</span>
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}>
+                          onClick={(e) => e.preventDefault()}
+                        >
                           3
                         </PaginationLink>
                       </PaginationItem>
                       <PaginationItem>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}>
+                          onClick={(e) => e.preventDefault()}
+                        >
                           <i className="fas fa-angle-right" />
                           <span className="sr-only">Next</span>
                         </PaginationLink>

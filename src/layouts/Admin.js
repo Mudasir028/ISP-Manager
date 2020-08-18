@@ -17,6 +17,7 @@ import UpdateFranchise from "views/examples/updateFranchise";
 import ViewPackage from "views/examples/viewPackage";
 import SingleUserBills from "views/examples/singleUserBills";
 import Logout from "views/examples/logout";
+import UpdateSubscribedPackage from "views/examples/updateSubscribedPackage";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
@@ -75,6 +76,7 @@ class Admin extends React.Component {
             <Route path="/isp/logout" component={Logout} />
             <Route path="/isp/view-user/:user_id" component={ViewUser} />
             <Route path="/isp/update-user/:user_id" component={UpdateUser} />
+            <Route path="/isp/update-subscribed-package/:user_id" component={UpdateSubscribedPackage} />
             <Route
               path="/isp/single-user-bills/:user_id"
               component={SingleUserBills}

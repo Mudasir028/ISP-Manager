@@ -34,11 +34,9 @@ class UpdateUser extends form {
       gender: "",
       date: new Date(),
       status: false,
-      package1: "",
       picUrl: "",
     },
     errors: {},
-    allPackages: [],
     allFranchises: [],
   };
 
@@ -47,11 +45,10 @@ class UpdateUser extends form {
     cnic: Joi.string().required().label("CNIC"),
     number: Joi.number().required().label("Number"),
     address: Joi.string().required().label("Address"),
-    franchise: Joi.string().required().label("Franchise"),
+    franchise: Joi.number().required().label("Franchise"),
     gender: Joi.string().required().label("Gender"),
     date: Joi.date().allow("").label("Joining Date"),
     status: Joi.boolean().required().label("Status"),
-    package1: Joi.string().required().label("Package"),
     picUrl: Joi.string().allow("").label("PicUrl"),
   };
 
@@ -59,11 +56,9 @@ class UpdateUser extends form {
     try {
       const id = this.props.match.params.user_id;
       const getuser = isp.getUserDetails(id);
-      const Packages = isp.getAllPackages();
       const Franchises = isp.getAllFranchises();
-      const [user, allPackages, allFranchises] = await Promise.all([
+      const [user, allFranchises] = await Promise.all([
         getuser,
-        Packages,
         Franchises,
       ]);
       const userDetails = user.user[0];
@@ -78,12 +73,12 @@ class UpdateUser extends form {
       data.status = Boolean(JSON.parse(userDetails.status.toLowerCase()));
       // data.status = Boolean.parse();
       // data.package1 = userDetails.package;
+      data.franchise = allFranchises.franchises[0].id;
 
       // data.picUrl = userDetails.pic;
 
       this.setState({
         data,
-        allPackages: allPackages.packages,
         allFranchises: allFranchises.franchises,
       });
     } catch (ex) {
@@ -105,7 +100,6 @@ class UpdateUser extends form {
         franchise: franchise_id,
         gender,
         date,
-        package1,
       } = this.state.data;
 
       const res = await isp.updateUser({
@@ -120,10 +114,7 @@ class UpdateUser extends form {
       });
       Toast.hide();
       Toast.success(res.msg[0].message, 3000);
-      await isp.createSubscription({
-        user_id: id,
-        package_id: package1,
-      });
+  
     } catch (ex) {
       console.log(ex);
       if (ex.response && ex.response.status === 400) {
@@ -255,13 +246,6 @@ class UpdateUser extends form {
                             { id: false, name: "Inactive" },
                             { id: true, name: "Active" },
                           ])}
-                        </Col>
-                        <Col lg="6">
-                          {this.renderSelect(
-                            "package1",
-                            "Package",
-                            allPackages
-                          )}
                         </Col>
                         <Col lg="6">
                           {this.renderImageInput(

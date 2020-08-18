@@ -19,6 +19,7 @@ import Header from "components/Headers/Header.js";
 import isp from "../../services/ispService";
 import userPic from "assets/img/theme/team-4-800x800.jpg";
 import Toast from "light-toast";
+import { reach } from "joi-browser";
 
 class Tables extends React.Component {
   state = { allUsers: [] };
@@ -75,8 +76,12 @@ class Tables extends React.Component {
       Toast.loading("Loading...");
       const allUsers = await isp.getAllUsers();
       this.setState({ allUsers: allUsers.users });
+      if (allUsers.msg[0].code === "400") {
+        window.location = process.env.REACT_APP_BASENAME + "/isp/logout";
+      }
     } catch (ex) {
-      if (ex.response && ex.response.status === 400) {
+      if (ex.response && ex.response.status === "400") {
+        console.log(ex);
         console.log(ex.response.data);
       }
     }

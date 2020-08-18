@@ -136,20 +136,33 @@ class ViewUser extends form {
                         </FormGroup>
                       </Col>
 
-                      <Col lg="6">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor={name}>
-                            Status
-                          </label>
-                          <p>{status === "1" ? "Active" : "Unactive"}</p>
-                        </FormGroup>
-                      </Col>
+                      
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor={name}>
                             Package
                           </label>
                           <p>{package1}</p>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                        <Link
+                        className="primary h5 mb-0 text-uppercase d-md"
+                        // to={`/admin/update-user/${u.id}  `}
+                        to={`/isp/update-subscribed-package/${this.props.match.params.user_id}  `}
+                      >
+                        Update subscribed package
+                      </Link>
+                        </FormGroup>
+                      </Col>
+
+                      <Col lg="6">
+                        <FormGroup>
+                          <label className="form-control-label" htmlFor={name}>
+                            Status
+                          </label>
+                          <p>{status === "1" ? "Active" : "Unactive"}</p>
                         </FormGroup>
                       </Col>
 

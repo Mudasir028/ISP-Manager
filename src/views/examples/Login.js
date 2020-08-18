@@ -36,6 +36,7 @@ class Login extends form {
         : process.env.REACT_APP_BASENAME + "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
+        window.location = process.env.REACT_APP_BASENAME + "/isp/logout";
         const errors = { ...this.state.errors };
         errors.username = ex.response.data;
         this.setState({ errors });

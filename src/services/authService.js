@@ -11,20 +11,18 @@ const tokenKey = "token";
 
 http.setJwt(getJwt());
 
-export async function login(username, password) {
+async function login(username, password) {
   const formData = new FormData();
   formData.append("username", username);
   formData.append("password", password);
   const { data: user } = await http.post(apiEndpoint.login, formData);
   const jwt = user.user[0].token;
+  console.log("token");
+  console.log(jwt);
   localStorage.setItem(tokenKey, jwt);
 }
 
-// export function loginWithJwt(jwt) {
-//   localStorage.setItem(tokenKey, jwt);o
-// }
-
-export async function logout(username) {
+async function logout(username) {
   try {
     await http.post(apiEndpoint.logout, { username });
   } catch (ex) {}
@@ -47,7 +45,6 @@ export function getJwt() {
 
 export default {
   login,
-  // loginWithJwt,
   logout,
   getCurrentUser,
   getJwt,

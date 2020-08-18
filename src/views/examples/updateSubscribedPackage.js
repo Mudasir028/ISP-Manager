@@ -1,55 +1,57 @@
 import React from "react";
 
+import Joi from "joi-browser";
+
+import form from "../../components/common/form";
+
 // reactstrap components
 import {
+  Button,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
+  Form,
   Container,
   Row,
-  Button,
   Col,
-  Form,
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.js";
+import UserHeader from "components/Headers/UserHeader.js";
+
+import userPic from "assets/img/theme/team-4-800x800.jpg";
+
 import isp from "../../services/ispService";
-import form from "../../components/common/form";
-import Joi from "joi-browser";
 import Toast from "light-toast";
 
-class SubscribePackage extends form {
+class UpdateSubscribedPackage extends form {
   state = {
-    data: { user: "", date: "", package1: "" },
-    allUsers: [],
-    allPackages: [],
+    data: {
+      date: "",
+      package1: "",
+    },
     errors: {},
+    allPackages: [],
   };
 
   schema = {
-    user: Joi.string().required().label("User"),
-    date: Joi.date().allow("").label("Last Pay Date"),
+    date: Joi.date().allow("").label("Joining Date"),
     package1: Joi.string().required().label("Package"),
   };
 
   async componentDidMount() {
     try {
-      const getuser = isp.getAllUsers();
-      const Packages = isp.getAllPackages();
-      const [allUsers, allPackages] = await Promise.all([getuser, Packages]);
-      const data = { ...this.state.data };
-      data.user = allUsers.users[0].id.toString();
-      data.date = allPackages.packages[0].create_date;
+      const id = this.props.match.params.user_id;
+      const allPackages = await isp.getAllPackages();
+
+      const { data } = this.state;
+
       data.package1 = allPackages.packages[0].id.toString();
+      data.date = allPackages.packages[0].created_at;
+
       this.setState({
         data,
-        allUsers: allUsers.users,
         allPackages: allPackages.packages,
       });
-      if (allUsers.msg[0].code === "400") {
-        window.location = process.env.REACT_APP_BASENAME + "/isp/logout";
-      }
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response.data);
@@ -60,13 +62,13 @@ class SubscribePackage extends form {
   doSubmit = async () => {
     try {
       Toast.loading("Loading...");
-      this.setState({ isSpinner: true });
-      const { user, date, package1 } = this.state.data;
+      const id = this.props.match.params.user_id;
+      const { date, package1 } = this.state.data;
 
       const res = await isp.createSubscription({
-        user_id: user,
-        last_paid: date,
+        user_id: id,
         package_id: package1,
+        last_paid: date,
       });
       Toast.hide();
       Toast.success(res.msg[0].message, 3000);
@@ -80,41 +82,37 @@ class SubscribePackage extends form {
         Toast.fail(ex.response.data, 3000);
       }
     }
-    this.setState({
-      isSpinner: false,
-    });
   };
 
   render() {
-    const { allUsers, allPackages } = this.state;
+    const { allFranchises, allPackages } = this.state;
 
     return (
       <>
-        <Header />
+        <UserHeader />
         {/* Page content */}
         <Container className="mt--7" fluid>
-          {/* Table */}
           <Row>
-            <div className="col">
-              <Card className="shadow">
-                <CardHeader className="border-0">
-                  <h3 className="mb-0">Subscribe Package</h3>
+            <Col className="order-xl-1" xl="12">
+              <Card className="bg-secondary shadow">
+                <CardHeader className="bg-white border-0">
+                  <Row className="align-items-center">
+                    <Col xs="8">
+                      <h3 className="mb-0">Update Subscribed Package</h3>
+                    </Col>
+                  </Row>
                 </CardHeader>
                 <CardBody>
                   <Form onSubmit={this.handleSubmit}>
                     <h6 className="heading-small text-muted mb-4">
-                      Subscribe package Information
+                      Subscribed package information
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
                         <Col lg="6">
-                          {this.renderSelect("user", "Users", allUsers)}
-                        </Col>
-
-                        <Col lg="6">
                           {this.renderInput(
                             "date",
-                            "Last Pay Date",
+                            "Joining Date",
                             "date",
                             "date placeholder"
                           )}
@@ -129,6 +127,7 @@ class SubscribePackage extends form {
                         </Col>
                       </Row>
                     </div>
+
                     <Row>
                       <Col className="text-right" xs="12">
                         <Button color="primary" size="lg" type="submit">
@@ -138,10 +137,8 @@ class SubscribePackage extends form {
                     </Row>
                   </Form>
                 </CardBody>
-
-                <CardFooter className="py-4"></CardFooter>
               </Card>
-            </div>
+            </Col>
           </Row>
         </Container>
       </>
@@ -149,4 +146,4 @@ class SubscribePackage extends form {
   }
 }
 
-export default SubscribePackage;
+export default UpdateSubscribedPackage;

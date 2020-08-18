@@ -3,7 +3,16 @@ import TableHeader from "./tableHeader";
 import TableBody from "./tableBody";
 import { Table } from "reactstrap";
 
-const TableComponent = ({ columns, sortColumn, onSort, data, classes }) => {
+const TableComponent = ({
+  columns,
+  sortColumn,
+  onSort,
+  data = [],
+  classes,
+}) => {
+  if (data.length === 0) {
+    return <h4 className="text-center my-5">No Record Found</h4>;
+  }
   return (
     <React.Fragment>
       <div className="table-responsive">
@@ -16,10 +25,6 @@ const TableComponent = ({ columns, sortColumn, onSort, data, classes }) => {
           <TableBody columns={columns} data={data} />
         </Table>
       </div>
-
-      {data.length === 0 && (
-        <h4 className="text-center my-5">No Record Found</h4>
-      )}
     </React.Fragment>
   );
 };

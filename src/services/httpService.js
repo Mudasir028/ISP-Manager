@@ -1,6 +1,4 @@
 import axios from "axios";
-import logger from "./logService";
-import Toast from "light-toast";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -8,14 +6,25 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 // axios.defaults.headers.common["any header Key"] = "add any default header";
 
 axios.interceptors.response.use(null, (error) => {
+  console.log("INTERCEPTOR CALLED");
+  console.log(error);
+
   const expectedError =
     error.response &&
     error.response.status >= 400 &&
     error.response.status < 500;
 
+  // Unexpected Error
   if (!expectedError) {
-    logger.log(error);
-    Toast.fail("An unexpected error occurrred.", 3000);
+    console.log("Logging the error", error);
+    // alert("An unexpected error occurred");
+  }
+
+  if (error.response.status === "400") {
+    console.log("access denied");
+    window.location = process.env.REACT_APP_BASENAME + "/isp/logout";
+    // localStorage.removeItem("token");
+    // window.location.reload();
   }
 
   return Promise.reject(error);

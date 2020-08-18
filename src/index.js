@@ -12,6 +12,7 @@ import AuthLayout from "layouts/Auth.js";
 import auth from "./services/authService";
 
 const user = auth.getCurrentUser();
+
 const hist = createBrowserHistory({ basename: process.env.REACT_APP_BASENAME });
 
 ReactDOM.render(
@@ -23,19 +24,16 @@ ReactDOM.render(
         <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
       )}
       {user ? (
-        // <Redirect from="/" to="/admin/index" />
         <>
-        <Redirect to="/" />
-        <Redirect from="/" to="/isp/users" />
+          <Redirect to="/" />
+          <Redirect from="/" to="/isp/users" />
         </>
       ) : (
         <>
-        <Redirect to="/" />
-        <Redirect from="/" to="/auth/login" />
+          <Redirect from="/" to="/auth/login" />
         </>
       )}
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")
 );
- 
